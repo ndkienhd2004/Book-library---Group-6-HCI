@@ -3,14 +3,14 @@ import React from "react";
 const FeatureCard = ({ title, description, imageUrl, imagePosition }) => {
   const styles = {
     container: {
-      position: "relative", // 🛠 Đổi từ "fixed" sang "relative"
+      position: "relative",
       display: "flex",
       flexDirection: imagePosition === "left" ? "row" : "row-reverse",
       alignItems: "center",
       justifyContent: "space-between",
       margin: "2rem 0",
       padding: "2rem",
-      maxWidth: "1200px",
+      maxWidth: "80vw",
       backgroundColor: "#F8F5A6",
       borderRadius: "20px",
     },
@@ -30,13 +30,7 @@ const FeatureCard = ({ title, description, imageUrl, imagePosition }) => {
       fontWeight: "bold",
       marginBottom: "1rem",
       lineHeight: "1.2",
-    },
-    underline: {
-      width: "4rem",
-      height: "0.3rem",
-      backgroundColor: "#FFD700",
-      display: "block",
-      marginBottom: "1rem",
+      color: "black",
     },
     description: {
       fontSize: "1.2rem",
@@ -75,10 +69,7 @@ const FeatureCard = ({ title, description, imageUrl, imagePosition }) => {
       </div>
       {/* Text Content */}
       <div style={styles.textSection}>
-        <h3 style={styles.title}>
-          {title}
-          <div style={styles.underline} />
-        </h3>
+        <h3 style={styles.title}>{title}</h3>
         <p style={styles.description}>{description}</p>
       </div>
       <span style={styles.swirl}>~</span>

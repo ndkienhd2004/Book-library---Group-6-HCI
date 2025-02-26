@@ -1,11 +1,9 @@
-import NavBar from "../../components/NavigationBar";
-import PATH from "../../constants/path";
 import React from "react";
 import headerBackgroundImage from "../../assets/AboutUsHeaderBackground.svg";
 import AboutUsFeature1 from "../../assets/AboutUsFeature1.png";
 import AboutUsFeature2 from "../../assets/AboutUsFeature2.png";
 import AboutUsFeature3 from "../../assets/AboutUsFeature3.png";
-import FeatureCard from "../../components/FeatureCard";
+import FeatureCard from "../../components/FeatureCard/FeatureCard";
 import { Stack } from "@mui/material";
 
 const features = [
@@ -34,31 +32,52 @@ const features = [
 
 const AboutUs = () => {
   return (
-    <div style={styles.aboutUs}>
-      <NavBar currentPage={PATH.about} />
-      <div>
-        <div style={styles.aboutUsHeader}>
-          <img
-            src={headerBackgroundImage}
-            alt="header background"
-            style={styles.headerBackgroundImage}
-          />
-          <div style={styles.aboutUsHeaderOverlay}>
-            <h1 style={styles.aboutUsHeaderTitle}>About Us</h1>
-            <p style={styles.aboutUsHeaderDescription}>
-              We are a team of passionate developers dedicated to creating an
-              inclusive reading platform that empowers individuals with ADHD to
-              reach their full potential.
-            </p>
-          </div>
-        </div>
-
-        <div style={styles.features}>
-          <h1>adadada</h1>
-          <img src={AboutUsFeature1}></img>
+    <Stack sx={styles.aboutUs}>
+      <div
+        style={{
+          width: "90%",
+          minHeight: "60vh",
+          backgroundImage: `url(${headerBackgroundImage})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          color: "white",
+          borderRadius: "20px",
+          marginTop: "2%",
+        }}
+      >
+        <div
+          style={{
+            paddingLeft: "10%",
+            paddingRight: "10%",
+            alignContent: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h1 style={{ fontSize: "36px", color: "white", fontWeight: "bold" }}>
+            About Us
+          </h1>
+          <p style={{ fontSize: "24px", color: "white" }}>
+            We are dedicated to empowering individuals with ADHD by providing an
+            innovative online reading platform that fosters focus,
+            accessibility, and a love for learning.
+          </p>
         </div>
       </div>
-    </div>
+      <section style={styles.aboutUsFeatures}>
+        <h2 style={{ color: "black" }}>Key Features of Our Website</h2>
+        <div style={styles.featuresContainer}>
+          {features.map((feature, index) => (
+            <FeatureCard key={index} {...feature} />
+          ))}
+        </div>
+      </section>
+    </Stack>
   );
 };
 
@@ -68,5 +87,10 @@ const styles = {
   aboutUs: {
     overflowX: "hidden",
     overflowY: "auto",
+    width: "100vw",
+    left: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "5%",
   },
 };

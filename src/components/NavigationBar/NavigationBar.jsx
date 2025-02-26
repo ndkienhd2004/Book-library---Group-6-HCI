@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import PATH from "../constants/path";
+import { useNavigate, useLocation } from "react-router-dom";
+import PATH from "../../constants/path";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Button } from "@mui/material";
-import { useState } from "react";
 
-const NavBar = ({ currentPage }) => {
+const NavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get current path dynamically
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -29,7 +29,7 @@ const NavBar = ({ currentPage }) => {
           key={path}
           style={{
             ...styles.navItem,
-            ...(currentPage === path ? styles.active : {}),
+            ...(location.pathname === path ? styles.active : {}), // Use location.pathname
           }}
           onClick={() => handleNavigate(path)}
         >
@@ -41,7 +41,7 @@ const NavBar = ({ currentPage }) => {
         <button
           style={{
             ...styles.signUp,
-            ...(currentPage === PATH.register ? styles.logIn : {}),
+            ...(location.pathname === PATH.register ? styles.logIn : {}),
           }}
           onClick={() => handleNavigate(PATH.register)}
         >
@@ -50,7 +50,7 @@ const NavBar = ({ currentPage }) => {
         <button
           style={{
             ...styles.logIn,
-            ...(currentPage === PATH.register ? styles.signUp : {}),
+            ...(location.pathname === PATH.register ? styles.signUp : {}),
           }}
           onClick={() => handleNavigate(PATH.login)}
         >
@@ -70,7 +70,7 @@ const styles = {
     left: "50%",
     transform: "translateX(-50%)",
     width: "90vw",
-    background: "#e2d4c7",
+    background: "rgba(226, 212, 199, 0.7)",
     padding: "15px 20px",
     display: "flex",
     alignItems: "center",
@@ -79,6 +79,9 @@ const styles = {
     boxSizing: "border-box",
     borderRadius: "20px",
     paddingBottom: "10px",
+    backdropFilter: "blur(8px)",
+    border: "1px solid rgba(255, 255, 255, 0.2)", // Viền mờ nhẹ để trông giống kính hơn
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   navItem: {
     fontSize: "18px",
@@ -86,7 +89,7 @@ const styles = {
     cursor: "pointer",
     color: "black",
     paddingBottom: "5px",
-    transition: "border-bottom 0.01s ease-in-out",
+    transition: "border-bottom 0.3s ease-in-out",
   },
   active: {
     borderBottom: "3px solid black",
@@ -105,7 +108,7 @@ const styles = {
     transition: "background 0.3s ease-in-out",
   },
   logIn: {
-    background: "black",
+    background: "#34312D",
     color: "white",
     border: "none",
     padding: "8px 15px",
