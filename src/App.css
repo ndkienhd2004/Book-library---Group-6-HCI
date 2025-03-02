@@ -4,3 +4,24 @@
   text-align: center;
   overflow-x: hidden;
 }
+/* Chỉ cho phép cuộn dọc, ẩn thanh cuộn */
+body {
+  overflow-x: hidden; /* Ẩn cuộn ngang */
+  overflow-y: auto; /* Cho phép cuộn dọc */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
+}
+
+body {
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE, Edge */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+}
+
+html {
+  overflow-x: hidden; /* Không cho phép cuộn ngang */
+  overflow-y: scroll; /* Cho phép cuộn dọc */
+  overscroll-behavior: contain; /* Ngăn chặn cuộn ngoài ý muốn */
+  -webkit-overflow-scrolling: touch; /* Cải thiện cuộn trên mobile */
+}

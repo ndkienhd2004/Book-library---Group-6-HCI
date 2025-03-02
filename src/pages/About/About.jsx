@@ -1,8 +1,8 @@
 import React from "react";
-import headerBackgroundImage from "../../assets/AboutUsHeaderBackground.svg";
-import AboutUsFeature1 from "../../assets/AboutUsFeature1.png";
-import AboutUsFeature2 from "../../assets/AboutUsFeature2.png";
-import AboutUsFeature3 from "../../assets/AboutUsFeature3.png";
+import headerBackgroundImage from "../../assets/images/AboutUsHeaderBackground.svg";
+import AboutUsFeature1 from "../../assets/images/AboutUsFeature1.png";
+import AboutUsFeature2 from "../../assets/images/AboutUsFeature2.png";
+import AboutUsFeature3 from "../../assets/images/AboutUsFeature3.png";
 import FeatureCard from "../../components/FeatureCard/FeatureCard";
 import { Stack } from "@mui/material";
 

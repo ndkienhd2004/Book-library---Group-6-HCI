@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import InputField from "../../components/InputField/InputField";
 import Button from "../../components/Button/Button";
-import loginBackgroundImage from "../../assets/LoginBackground.png";
+import loginBackgroundImage from "../../assets/images/LoginBackground.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
@@ -100,7 +100,7 @@ const styles = {
     overflowY: "hidden",
     width: "90vw",
     height: "80vh",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
     alignItems: "center",
     marginTop: "5vh",
     borderRadius: 10,
@@ -108,12 +108,16 @@ const styles = {
   leftOutline: {
     flex: 1,
     height: "100%",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.1)",
+    boxShadow: "10px 10px 30px rgba(0, 0, 0, 0.2)",
+    borderTopLeftRadius: "15px", // Bo góc trái trên
+    borderBottomLeftRadius: "15px",
+    position: "relative",
+    zIndex: 2,
   },
   rightOutline: {
     flex: 1,
