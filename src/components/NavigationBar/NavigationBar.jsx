@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PATH from "../../constants/path";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Button } from "@mui/material";
-
+import SearchBar from "../SearchBar/SearchBar";
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get current path dynamically
@@ -13,7 +13,7 @@ const NavBar = () => {
 
   const navItems = [
     { text: "Home", path: PATH.home },
-    { text: "Library", path: PATH.library },
+    { text: "My Library", path: PATH.library },
     { text: "Upload Book", path: PATH.uploading },
     { text: "About Us", path: PATH.about },
   ];
@@ -36,6 +36,7 @@ const NavBar = () => {
           {text}
         </div>
       ))}
+      <SearchBar />
 
       <div style={styles.buttonGroup}>
         <button
@@ -84,7 +85,7 @@ const styles = {
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   navItem: {
-    fontSize: "18px",
+    fontSize: "16px",
     fontWeight: "bold",
     cursor: "pointer",
     color: "black",
