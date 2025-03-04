@@ -1,6 +1,6 @@
 import HomePageHeaderBackground from "../../assets/images/HomePageHeaderBackground.png";
 import BookList from "../../components/BookCard/BookList";
-
+import Footer from "../../components/Footer/Footer";
 const Home = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -39,6 +39,7 @@ const Home = () => {
         </div>
         <BookList />
       </div>
+      <Footer />
     </div>
   );
 };

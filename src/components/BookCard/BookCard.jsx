@@ -1,19 +1,24 @@
 import React from "react";
 import "./BookCard.css";
+import { useNavigate } from "react-router-dom";
 
-const BookCard = ({ title, author, genre, image }) => {
+const BookCard = ({ book }) => {
+  const navigate = useNavigate();
   return (
     <div style={styles.container}>
-      <div style={{ ...styles.card, backgroundImage: `url(${image})` }}>
+      <div style={{ ...styles.card, backgroundImage: `url(${book.image})` }}>
         <div style={styles.content}>
-          <div style={styles.genre}>{genre}</div>
+          <div style={styles.genre}>{book.genre}</div>
           <div style={{ marginBottom: "15px" }}>
-            <h3 style={styles.title}>"{title}"</h3>
+            <h3 style={styles.title}>"{book.title}"</h3>
             <span style={{ color: "black", fontSize: "14px", marginTop: 0 }}>
-              By {author}
+              By {book.author}
             </span>
           </div>
-          <button className="bookCardButton-with-icon">
+          <button
+            className="bookCardButton-with-icon"
+            onClick={() => navigate(`/books/${book.id}`)}
+          >
             <svg
               className="icon"
               id="Play"
@@ -64,6 +69,7 @@ const styles = {
     backgroundSize: "cover",
     backgroundPosition: "center",
     justifyContent: "center",
+    backgroundSize: "100% 100%",
     alignItems: "center",
   },
   content: {

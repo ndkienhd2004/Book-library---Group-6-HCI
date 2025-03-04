@@ -5,6 +5,7 @@ import AboutUsFeature2 from "../../assets/images/AboutUsFeature2.png";
 import AboutUsFeature3 from "../../assets/images/AboutUsFeature3.png";
 import FeatureCard from "../../components/FeatureCard/FeatureCard";
 import { Stack } from "@mui/material";
+import Footer from "../../components/Footer/Footer";
 
 const features = [
   {
@@ -77,6 +78,9 @@ const AboutUs = () => {
           ))}
         </div>
       </section>
+      <div style={{ width: "100vw" }}>
+        <Footer />
+      </div>
     </Stack>
   );
 };

@@ -106,7 +106,7 @@ const StyledWrapper = styled.div`
     bottom: 5px;
     height: 40px;
     width: 40px;
-    background-color: red;
+    background-color: #d9c5b2;
     border-radius: 10px;
     z-index: -1;
     fill: #34312d;
