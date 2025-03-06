@@ -2,14 +2,31 @@ import { Stack } from "@mui/material";
 import InputField from "../../components/InputField/InputField";
 import Button from "../../components/Button/Button";
 import loginBackgroundImage from "../../assets/images/LoginBackground.png";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../apis/auth";
+import AppContext from "../../context/context";
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userEmailErr, setUserEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
+  const { setAuth } = useContext(AppContext);
+
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      console.log("Login success:", data);
+      navigate("/");
+      setAuth(true);
+    },
+    onError: (error) => {
+      console.error("Login error:", error);
+    },
+  });
 
   const onUsernameInputChanged = (e) => {
     setEmail(e.target.value);
@@ -36,10 +53,12 @@ const Login = () => {
     return valid;
   };
 
-  const handleLoginButtonClicked = () => {
+  const handleLoginButtonClicked = async (e) => {
+    e.preventDefault();
     if (validateForm()) {
-      console.log("Login successful");
-      navigate("/");
+      console.log("emai:", email);
+      console.log("password:", password);
+      mutation.mutate({ email: email, password: password });
     } else {
       console.log("Login failed");
     }
@@ -72,7 +91,7 @@ const Login = () => {
         <Button
           placeholder={"LOGIN"}
           style={{ marginTop: "10px" }}
-          onClick={handleLoginButtonClicked}
+          onClick={(e) => handleLoginButtonClicked(e)}
         />
       </div>
       <div style={styles.rightOutline}>

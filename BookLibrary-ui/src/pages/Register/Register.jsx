@@ -2,8 +2,11 @@ import { Stack } from "@mui/material";
 import InputField from "../../components/InputField/InputField";
 import Button from "../../components/Button/Button";
 import RegisterBackgroundImage from "../../assets/images/loginBackground.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "../../apis/auth";
+import AppContext from "../../context/context";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,6 +16,14 @@ const Register = () => {
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [fullnameErr, setFullnameErr] = useState("");
+  const { setAuth } = useContext(AppContext);
+
+  const onFullnameInputChanged = (e) => {
+    setFullname(e.target.value);
+    setFullnameErr("");
+  };
 
   const onEmailInputChanged = (e) => {
     setEmail(e.target.value);
@@ -29,7 +40,11 @@ const Register = () => {
   const validateForm = () => {
     let valid = true;
     if (email === "") {
-      setEmailErr("Vui lòng nhập họ và tên");
+      setEmailErr("Vui lòng nhập email");
+      valid = false;
+    }
+    if (fullname === "") {
+      setFullnameErr("Vui lòng nhập họ và tên");
       valid = false;
     }
     if (password === "") {
@@ -51,12 +66,27 @@ const Register = () => {
     return valid;
   };
 
-  const handleRegisterButtonClicked = () => {
-    if (validateForm()) {
-      console.log("Login successful");
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
+      console.log("Register success:", data);
       navigate("/");
+      setAuth(true);
+    },
+    onError: (error) => {
+      alert(
+        error.response.data.errorResponse.errmsg ||
+          "Registration failed. Please try again."
+      );
+    },
+  });
+
+  const handleRegisterButtonClicked = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      mutation.mutate({ email: email, password: password, fullname: fullname });
     } else {
-      console.log("Login failed");
+      console.log("Register failed due to invalid form input.");
     }
   };
   return (
@@ -71,6 +101,16 @@ const Register = () => {
             value={email}
             onChange={onEmailInputChanged}
             error={emailErr}
+          />
+        </div>
+        <div style={styles.inputContainer}>
+          <label style={styles.label}>Fullname</label>
+          <InputField
+            placeholder="Enter your fullname"
+            style={styles.inputField}
+            value={fullname}
+            onChange={onFullnameInputChanged}
+            error={fullnameErr}
           />
         </div>
         <div style={styles.inputContainer}>
@@ -96,7 +136,7 @@ const Register = () => {
         <Button
           placeholder={"REGISTER"}
           style={{ marginTop: "10px" }}
-          onClick={handleRegisterButtonClicked}
+          onClick={(e) => handleRegisterButtonClicked(e)}
         />
       </div>
       <div style={styles.rightOutline}>

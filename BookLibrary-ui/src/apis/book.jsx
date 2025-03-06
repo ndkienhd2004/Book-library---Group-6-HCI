@@ -1,5 +1,13 @@
-export const getLibrary = async (data) => {
-  return http.post < Books > ("/me/library", data);
+import http from "../utils/http";
+
+export const getLibrary = async () => {
+  try {
+    const respond = await http.post("/list-book");
+    return respond.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu:", error);
+    return [];
+  }
 };
 
 export const getExplain = async (data) => {

@@ -1,29 +1,10 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from "../../context/context";
 import React, { useState, useEffect, useRef } from "react";
 
 const SearchBar = () => {
-  const { setSearchTerm, setResultTitle } = useGlobalContext();
   const [searchText, setSearchText] = useState("");
-  const navigate = useNavigate();
-  const inputRef = useRef(null);
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let tempSearchTerm = searchText.trim();
-    if (tempSearchTerm.replace(/[^\w\s]/gi, "").length === 0) {
-      setSearchTerm("the lost world");
-      setResultTitle("Please Enter Something ...");
-    } else {
-      setSearchTerm(searchText);
-    }
-    setSearchText("");
-  };
+
   return (
     <StyledWrapper>
       <div className="input-container">
@@ -39,7 +20,7 @@ const SearchBar = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           className="icon"
-          onClick={handleSubmit}
+          // onClick={handleSubmit}
         >
           <g strokeWidth={0} id="SVGRepo_bgCarrier" />
           <g

@@ -24,10 +24,11 @@ const BookList = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const book = getLibrary("");
+        const book = await getLibrary("");
         setBooks(book);
+        console.log(book);
       } catch (err) {
-        console.error("Error fetching books:", error);
+        console.error("Error fetching books:", err);
       }
     };
     fetchBooks();
