@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import http from "../utils/http";
 
 export const getLibrary = async () => {
@@ -20,4 +21,25 @@ export const getSummary = async (data) => {
 
 export const updateProgress = async (data) => {
   return http.post("/book/update-progress", data);
+};
+
+export const uploadBook = async ({ file, title, author, numPages }) => {
+  const formData = new FormData();
+  formData.append("book", file);
+  formData.append("title", title);
+  formData.append("author", author);
+  formData.append("numPages", numPages);
+
+  try {
+    const respond = await http.post("/book/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(formData.headers);
+    return respond.data;
+  } catch (error) {
+    console.error("Lỗi khi tải sách:", error);
+    throw error;
+  }
 };

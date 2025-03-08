@@ -18,7 +18,7 @@ const Register = () => {
   const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
   const [fullname, setFullname] = useState("");
   const [fullnameErr, setFullnameErr] = useState("");
-  const { setAuth } = useContext(AppContext);
+  const { login: setAuthToken } = useContext(AppContext);
 
   const onFullnameInputChanged = (e) => {
     setFullname(e.target.value);
@@ -37,10 +37,17 @@ const Register = () => {
     setConfirmedPassword(e.target.value);
     setConfirmPasswordErr("");
   };
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
   const validateForm = () => {
     let valid = true;
     if (email === "") {
       setEmailErr("Vui lòng nhập email");
+      valid = false;
+    } else if (!validateEmail(email)) {
+      setEmailErr("Email không hợp lệ. Vui lòng nhập đúng định dạng.");
       valid = false;
     }
     if (fullname === "") {
@@ -71,7 +78,7 @@ const Register = () => {
     onSuccess: (data) => {
       console.log("Register success:", data);
       navigate("/");
-      setAuth(true);
+      setAuthToken(data.data.token);
     },
     onError: (error) => {
       alert(
@@ -178,7 +185,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     boxShadow: "10px 10px 30px rgba(0, 0, 0, 0.2)",
-    borderTopLeftRadius: "15px", // Bo góc trái trên
+    borderTopLeftRadius: "15px",
     borderBottomLeftRadius: "15px",
     position: "relative",
     zIndex: 2,
@@ -199,7 +206,7 @@ const styles = {
     color: "#34312D",
     fontSize: "36px",
     fontWeight: "bold",
-    marginBottom: "6rem",
+    marginBottom: "1rem",
   },
   inputContainer: {
     display: "flex",
@@ -211,7 +218,7 @@ const styles = {
   label: {
     fontSize: "16px",
     fontWeight: "500",
-    marginBottom: "5px",
+    marginBottom: "0px",
     color: "#34312D",
   },
   inputField: {

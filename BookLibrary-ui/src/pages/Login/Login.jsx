@@ -14,14 +14,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [userEmailErr, setUserEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
-  const { setAuth } = useContext(AppContext);
-
+  const { login: setAuthToken } = useContext(AppContext);
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log("Login success:", data);
       navigate("/");
-      setAuth(true);
+      setAuthToken(data.data.token);
+      console.log(data.data.token);
     },
     onError: (error) => {
       console.error("Login error:", error);

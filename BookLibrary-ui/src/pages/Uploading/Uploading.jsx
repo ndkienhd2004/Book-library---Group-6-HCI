@@ -1,8 +1,56 @@
-import { fontSize } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { pdfjs, Document } from "react-pdf";
+import { uploadBook } from "../../apis/book";
+import { useMutation } from "@tanstack/react-query";
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
 const Uploading = () => {
+  const [uploadedfile, setUploadedfile] = useState("");
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [numPages, setNumPages] = useState(0);
+
+  const handleUploadFile = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadedfile(file);
+    }
+  };
+  const handleLoadSuccess = async (pdf) => {
+    const pdfInfo = await pdf.getMetadata();
+    setTitle(uploadedfile?.name?.replace(".pdf", "").trim() || "Unknown");
+    setAuthor(
+      pdfInfo.info.Author && pdfInfo.info.Author.trim() !== ""
+        ? pdfInfo.info.Author
+        : "Unknown"
+    );
+    setNumPages(pdf.numPages);
+  };
+  const mutation = useMutation({
+    mutationFn: uploadBook,
+    onSuccess: (data) => {
+      console.log(data);
+      setUploadedfile("");
+      setTitle("");
+      setAuthor("");
+      setNumPages("");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleUploadButtonClicked = async (e) => {
+    e.preventDefault();
+    mutation.mutate({
+      file: uploadedfile,
+      title: title,
+      author: author,
+      numPages: numPages,
+    });
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -21,19 +69,40 @@ const Uploading = () => {
               <div className="back-side cover" />
             </div>
             <label className="custom-file-upload">
-              <input className="title" type="file" />
+              <input
+                className="title"
+                type="file"
+                accept="application/pdf"
+                required
+                onChange={handleUploadFile}
+              />
               Choose a file
             </label>
           </div>
         </StyledWrapper>
       </div>
-      <div>
-        <h2 style={{ color: "black" }}>PDF, EPUB</h2>
+      {uploadedfile ? (
+        <div style={{ flexDirection: "column" }}>
+          <h3 style={{ color: "black" }}>Book Information:</h3>
+          <span style={{ color: "black" }}>Title: {title}</span>
+          <br />
+          <span style={{ color: "black" }}>Author: {author}</span>
+          <br />
+          <span style={{ color: "black" }}>numPages: {numPages}</span>
+          <br />
+          <Document file={uploadedfile} onLoadSuccess={handleLoadSuccess} />
+          <p style={{ color: "black" }}>Selected File: {uploadedfile.name}</p>
+          <button onClick={handleUploadButtonClicked}>Upload book</button>
+        </div>
+      ) : (
+        <div style={styles.footer}>
+          <h2 style={{ color: "black" }}>PDF, EPUB</h2>
 
-        <span style={{ color: "black" }}>
-          Upload pdf files that can highlight text for the best experience
-        </span>
-      </div>
+          <span style={{ color: "black" }}>
+            Upload pdf files that can highlight text for the best experience
+          </span>
+        </div>
+      )}
     </div>
   );
 };
@@ -170,7 +239,7 @@ export default Uploading;
 const styles = {
   container: {
     width: "80vw",
-    height: "80vh",
+    height: "85vh",
     backgroundColor: "white",
     borderRadius: "10px",
     overflow: "hidden",
@@ -183,7 +252,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     border: "1px solid black",
-    marginTop: "5vh",
+    marginTop: "10vh",
     flexDirection: "column",
   },
   header: {
@@ -204,8 +273,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    marginBottom: "5vh",
-    marginTop: "5vh",
+    marginTop: "1vh",
   },
   footer: {
     display: "flex",

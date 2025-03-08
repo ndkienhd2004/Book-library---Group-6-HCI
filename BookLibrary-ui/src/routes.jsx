@@ -18,7 +18,6 @@ function createRoutes() {
   const routes = useRoutes([
     {
       path: PATH.home,
-      index: true,
       element: <Home />,
     },
     {
@@ -45,7 +44,11 @@ function createRoutes() {
       path: PATH.register,
       element: <Register />,
     },
-    { path: PATH.login, element: <Login /> },
+    {
+      path: PATH.login,
+      index: true,
+      element: <Login />,
+    },
     {
       path: "/books/:bookid",
       element: <BookDetails />,

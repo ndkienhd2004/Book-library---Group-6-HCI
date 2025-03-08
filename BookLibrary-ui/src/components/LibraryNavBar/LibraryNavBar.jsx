@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import HistoryIcon from "@mui/icons-material/History";
 import PersonIcon from "@mui/icons-material/Person";
@@ -6,118 +6,90 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useLocation, useNavigate } from "react-router-dom";
 import PATH from "../../constants/path";
+import { deleteAccessToken } from "../../utils/auth";
+import AppContext from "../../context/context";
+
 const Radio = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const { logout } = useContext(AppContext);
   const handleNavigate = (path) => {
     navigate(path);
-    console.log(location.pathname);
+  };
+
+  const handleLogoutButtonClicked = () => {
+    console.log("Logout clicked");
+    logout();
   };
   return (
     <StyledWrapper>
-      <div className="input">
-        <button
-          className="value"
+      <div className="menu">
+        <NavButton
           onClick={() => handleNavigate(PATH.library)}
-          active={location.pathname === ""}
+          $active={location.pathname === PATH.library}
         >
-          <svg
-            data-name="Layer 2"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <PersonIcon />
-          </svg>
-          Profile
-        </button>
-        <button
-          className="value"
+          <PersonIcon /> Profile
+        </NavButton>
+        <NavButton
           onClick={() => handleNavigate(PATH.savedBooks)}
-          active={location.pathname === `library/${PATH.savedBooks}`}
+          $active={location.pathname.includes(PATH.savedBooks)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="Line">
-            <BookmarkIcon />
-          </svg>
-          Saved Book
-        </button>
-        <button
-          className="value"
+          <BookmarkIcon /> Saved Book
+        </NavButton>
+        <NavButton
           onClick={() => handleNavigate(PATH.history)}
-          active={location.pathname === `library/${PATH.history}`}
+          $active={location.pathname.includes(PATH.history)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-            <HistoryIcon />
-          </svg>
-          History
-        </button>
-        <button className="value">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="svg8">
-            <LogoutIcon />
-          </svg>
-          Logout
-        </button>
+          <HistoryIcon /> History
+        </NavButton>
+        <NavButton onClick={handleLogoutButtonClicked}>
+          <LogoutIcon /> Logout
+        </NavButton>
       </div>
     </StyledWrapper>
   );
 };
 
 const StyledWrapper = styled.div`
-  .input {
+  .menu {
     display: flex;
     flex-direction: column;
     width: 16vw;
     background-color: #ffffff;
-    justify-content: center;
     border-radius: 5px;
     margin-top: 3vh;
   }
+`;
 
-  .value {
-    background-color: transparent;
-    border: none;
-    padding: 30px;
-    color: black;
-    display: flex;
-    justify-content:"center",
-    align-items:"center",
-    position: relative;
-    gap: 10px;
-    cursor: pointer;
-    border-radius: 4px;
+const NavButton = styled.button`
+  background-color: ${(props) => (props.$active ? "#d9c5b2" : "transparent")};
+  border: none;
+  padding: 20px;
+  color: black;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  position: relative;
+  font-size: 16px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #f0e6dd;
   }
 
-  .value:not(:active):hover,
-  .value:focus {
-    background-color: #d9c5b2;
-  }
-
-  .value:focus,
-  .value:active {
-    background-color: #d9c5b2;
-    outline: none;
-  }
-
-  .value::before {
+  &::before {
     content: "";
     position: absolute;
-
     top: 5px;
     left: -10px;
     width: 5px;
     height: 80%;
     background-color: #34312d;
     border-radius: 5px;
-    opacity: 0;
-  }
-
-  .value:focus::before,
-  .value:active::before {
-    opacity: 1;
-  }
-
-  .value svg {
-    width: 15px;
+    opacity: ${(props) => (props.$active ? "1" : "0")};
+    transition: opacity 0.3s;
   }
 `;
 
