@@ -1,6 +1,7 @@
 const fs = require("fs");
 const pdf = require("pdf-parse");
 const Book = require("../models/book");
+const path = require("path");
 
 class BookController {
   async summaryBook(req, res) {
@@ -33,33 +34,6 @@ class BookController {
     const pdfData = await pdf(pdfBuffer);
     const content = pdfData.text;
     let summary = "";
-    // let questions =
-    //   "Hãy giúp tôi tóm tắt ngắn gọn nội dung cuốn sách này. " +
-    //   "Vì nội dung nó quá dài vượt quá lượng tokien cho phép nên tôi sẽ gủi nội dung theo nhiều message. " +
-    //   "Bạn sẽ bắt đầu tóm tắt khi gặp đoạn văn chứa thông báo 'KẾT THÚC'." +
-    //   "BẠn không cung cấp thêm bất kì thông tin nào khác ngoài nội dung sách, kể cả các gợi ý ";
-
-    // if (content.length > 4000) {
-    //   const pages = Math.ceil(content.length / 4000);
-    //   for (let i = 0; i < pages; i++) {
-    //     if (i == 0) {
-    //       const result = await askAI(
-    //         questions + content.slice(i * 4000, (i + 1) * 4000)
-    //       );
-    //       summary += result.choices[0].message.content;
-    //     } else if (i == pages - 1) {
-    //       const result = await askAI(
-    //         content.slice(i * 4000, (i + 1) * 4000) + "KẾT THÚC"
-    //       );
-    //       summary += result.choices[0].message.content;
-    //     } else {
-    //       await askAI(content.slice(i * 4000, (i + 1) * 4000));
-    //     }
-    //   }
-    // } else {
-    //   const result = await askAI(questions + content + "KẾT THÚC");
-    //   summary = result.choices[0].message.content;
-    // }
 
     const new_book = await Book.create({
       filename: req.file.filename,
@@ -105,6 +79,18 @@ class BookController {
       res.status(400).send(error.message);
     }
     res.send("Update successfully");
+  }
+
+  async getBook(req, res) {
+    const { book_id } = req.params;
+    
+    const filePath = path.join(__dirname, "../../public/book", `${book_id}`);
+
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(404).send("File not found");
+      }
+    });
   }
 }
 
