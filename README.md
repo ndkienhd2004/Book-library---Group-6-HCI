@@ -13,3 +13,23 @@ Backend: Node.js, Express.js, MongoDB
 Authentication: JSON Web Token (JWT)
 
 Storage: MongoDB
+
+🔧 Cài Đặt & Chạy Dự Án
+
+1️⃣ Cài đặt Frontend
+cd frontend
+npm install
+npm run dev
+2️⃣ Cài đặt Backend
+cd backend
+npm install
+npm start
+🎯 Tính Năng Chính
+
+📖 Đọc sách trực tuyến
+
+🔍 Tìm kiếm sách theo tên, thể loại
+
+🛒 Tải sách lên và chia sẻ với mọi người
+
+🔐 Đăng ký, đăng nhập (JWT Authentication)
