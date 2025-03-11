@@ -6,8 +6,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useLocation, useNavigate } from "react-router-dom";
 import PATH from "../../constants/path";
-import { deleteAccessToken } from "../../utils/auth";
 import AppContext from "../../context/context";
+import * as auth from "../../apis/auth";
 
 const Radio = () => {
   const location = useLocation();
@@ -17,8 +17,9 @@ const Radio = () => {
     navigate(path);
   };
 
-  const handleLogoutButtonClicked = () => {
-    console.log("Logout clicked");
+  const handleLogoutButtonClicked = async () => {
+    const respond = await auth.logout();
+    console.log(respond);
     logout();
   };
   return (

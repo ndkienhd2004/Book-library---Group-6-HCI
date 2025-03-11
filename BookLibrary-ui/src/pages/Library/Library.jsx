@@ -2,21 +2,22 @@ import LibraryNavBar from "../../components/LibraryNavBar/LibraryNavBar";
 import LibraryImage from "../../assets/images/MyLibrary.jpg";
 import ProfileImage from "../../assets/images/profile.png";
 import Footer from "../../components/Footer/Footer";
-import BookList from "../../components/BookCard/BookList";
 import { Outlet } from "react-router-dom";
+import { useContext } from "react";
+import AppContext from "../../context/context";
 
 const Library = () => {
+  const { name } = useContext(AppContext);
   return (
     <div style={styles.container}>
       <div
         style={{ ...styles.header, backgroundImage: `url(${LibraryImage})` }}
       >
-        {/* Profile Section (Image + Name) */}
         <div style={styles.profileContainer}>
           <div style={styles.profileImageContainer}>
             <img src={ProfileImage} alt="Profile" style={styles.profileImage} />
           </div>
-          <span style={styles.profileName}>Anastasia</span>
+          <span style={styles.profileName}>{String(name) || "Guest"}</span>
         </div>
       </div>
       <div style={styles.body}>

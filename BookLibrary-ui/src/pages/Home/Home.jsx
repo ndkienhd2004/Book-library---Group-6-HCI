@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react";
 import HomePageHeaderBackground from "../../assets/images/HomePageHeaderBackground.png";
 import BookList from "../../components/BookCard/BookList";
 import Footer from "../../components/Footer/Footer";
+import { getLibrary } from "../../apis/book";
 const Home = () => {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const book = await getLibrary("");
+        setBooks(book);
+        console.log(book);
+      } catch (err) {
+        console.error("Error fetching books:", err);
+      }
+    };
+    fetchBooks();
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {/* Header */}
@@ -37,7 +54,7 @@ const Home = () => {
             readers of all tastes
           </p>
         </div>
-        <BookList />
+        <BookList books={books} />
       </div>
       <Footer />
     </div>

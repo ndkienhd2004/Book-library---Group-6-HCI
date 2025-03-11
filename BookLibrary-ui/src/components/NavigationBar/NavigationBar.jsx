@@ -1,14 +1,33 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import PATH from "../../constants/path";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Button } from "@mui/material";
+import { Button, Menu, MenuItem } from "@mui/material";
 import SearchBar from "../SearchBar/SearchBar";
+import { useContext, useState } from "react";
+import AppContext from "../../context/context";
+import ProfileImage from "../../assets/images/profile.png";
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get current path dynamically
-
+  const { auth, name, logout } = useContext(AppContext);
   const handleNavigate = (path) => {
     navigate(path);
+  };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleProfileClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLogout = async () => {
+    const respond = await logout();
+    console.log(respond);
+    handleClose();
+  };
+  const handleProfileClicked = () => {
+    navigate(PATH.library);
+    handleClose();
   };
 
   const navItems = [
@@ -36,28 +55,50 @@ const NavBar = () => {
           {text}
         </div>
       ))}
-      <SearchBar />
-
-      <div style={styles.buttonGroup}>
-        <button
-          style={{
-            ...styles.signUp,
-            ...(location.pathname === PATH.register ? styles.logIn : {}),
-          }}
-          onClick={() => handleNavigate(PATH.register)}
-        >
-          Sign Up
-        </button>
-        <button
-          style={{
-            ...styles.logIn,
-            ...(location.pathname === PATH.register ? styles.signUp : {}),
-          }}
-          onClick={() => handleNavigate(PATH.login)}
-        >
-          Log In
-        </button>
-      </div>
+      {auth.token ? (
+        <div style={styles.profileWrapper}>
+          <SearchBar />
+          <div style={styles.profileContainer} onClick={handleProfileClick}>
+            <div style={styles.profileImageContainer}>
+              <img
+                src={ProfileImage}
+                alt="Profile"
+                style={styles.profileImage}
+              />
+            </div>
+            <span style={styles.profileName}>{String(name) || "Guest"}</span>
+          </div>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleProfileClicked}>Profile</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        </div>
+      ) : (
+        <div style={styles.buttonGroup}>
+          <button
+            style={{
+              ...styles.signUp,
+              ...(location.pathname === PATH.register ? styles.logIn : {}),
+            }}
+            onClick={() => handleNavigate(PATH.register)}
+          >
+            Sign Up
+          </button>
+          <button
+            style={{
+              ...styles.logIn,
+              ...(location.pathname === PATH.register ? styles.signUp : {}),
+            }}
+            onClick={() => handleNavigate(PATH.login)}
+          >
+            Log In
+          </button>
+        </div>
+      )}
     </nav>
   );
 };
@@ -116,5 +157,35 @@ const styles = {
     borderRadius: "10px",
     cursor: "pointer",
     transition: "background 0.3s ease-in-out",
+  },
+  profileContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  profileImageContainer: {
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    overflow: "hidden",
+    border: "2px solid black",
+  },
+  profileImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  profileName: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "black",
+    marginLeft: "10px",
+    marginBottom: "10px",
+    textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
+  },
+  profileWrapper: {
+    display: "flex",
+    alignItems: "center",
+    gap: "5vw",
+    marginRight: "1 vw",
   },
 };

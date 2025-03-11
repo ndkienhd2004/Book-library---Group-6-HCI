@@ -5,7 +5,7 @@ import loginBackgroundImage from "../../assets/images/LoginBackground.png";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { login } from "../../apis/auth";
+import * as auth from "../../apis/auth";
 import AppContext from "../../context/context";
 
 const Login = () => {
@@ -16,11 +16,10 @@ const Login = () => {
   const [passwordErr, setPasswordErr] = useState("");
   const { login: setAuthToken } = useContext(AppContext);
   const mutation = useMutation({
-    mutationFn: login,
+    mutationFn: auth.login,
     onSuccess: (data) => {
       navigate("/");
-      setAuthToken(data.data.token);
-      console.log(data.data.token);
+      setAuthToken(data.data);
     },
     onError: (error) => {
       console.error("Login error:", error);
@@ -55,8 +54,6 @@ const Login = () => {
   const handleLoginButtonClicked = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("emai:", email);
-      console.log("password:", password);
       mutation.mutate({ email: email, password: password });
     } else {
       console.log("Login failed");

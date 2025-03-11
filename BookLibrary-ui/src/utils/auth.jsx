@@ -8,3 +8,13 @@ export const getAccessToken = () => {
 export const deleteAccessToken = () => {
   localStorage.removeItem("accessToken");
 };
+export const setUsername = (token) => {
+  localStorage.setItem("username", token);
+};
+export const getUsername = () => {
+  return localStorage.getItem("username") || "";
+};
+
+export const deleteUsername = () => {
+  localStorage.removeItem("username");
+};

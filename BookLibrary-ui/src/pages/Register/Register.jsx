@@ -5,7 +5,7 @@ import RegisterBackgroundImage from "../../assets/images/loginBackground.png";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { register } from "../../apis/auth";
+import * as auth from "../../apis/auth";
 import AppContext from "../../context/context";
 
 const Register = () => {
@@ -74,11 +74,11 @@ const Register = () => {
   };
 
   const mutation = useMutation({
-    mutationFn: register,
+    mutationFn: auth.register,
     onSuccess: (data) => {
       console.log("Register success:", data);
       navigate("/");
-      setAuthToken(data.data.token);
+      setAuthToken(data.data);
     },
     onError: (error) => {
       alert(
