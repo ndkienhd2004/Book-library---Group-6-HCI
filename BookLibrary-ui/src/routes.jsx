@@ -13,7 +13,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Library/LibraryPage/Profile/Profile";
 import SavedBooks from "./pages/Library/LibraryPage/SavedBooks/SavedBooks";
 import History from "./pages/Library/LibraryPage/History/History";
-import ReadingPage from "./pages/ReadingPage/ReadingPage";
+import ReadingPage from "./pages/ReadingPage";
 
 function createRoutes() {
   const routes = useRoutes([

@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import InputField from "../../components/InputField/InputField";
 import Button from "../../components/Button/Button";
-import RegisterBackgroundImage from "../../assets/images/loginBackground.png";
+import RegisterBackgroundImage from "../../assets/images/RegisterBackground.jpg";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -154,7 +154,7 @@ const Register = () => {
             Hey
           </h3>
           <h3 style={{ color: "#34312D", fontSize: "24px" }}>
-            Welcome to BookLibrary
+            Sign up now to explore an unlimited world of books!{" "}
           </h3>
         </div>
       </div>

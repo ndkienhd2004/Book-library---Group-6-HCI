@@ -22,7 +22,7 @@ const Login = () => {
       setAuthToken(data.data);
     },
     onError: (error) => {
-      console.error("Login error:", error);
+      alert(error || "Login failed. Please try again.");
     },
   });
 
