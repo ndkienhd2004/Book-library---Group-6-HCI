@@ -39,7 +39,23 @@ export const uploadBook = async ({ file, title, author, numPages }) => {
     console.log(formData.headers);
     return respond.data;
   } catch (error) {
-    console.error("Lỗi khi tải sách:", error);
+    throw error;
+  }
+};
+
+export const getBookById = async (bookId) => {
+  try {
+    console.log("Requesting:", `http://localhost:8080/book/${bookId}`);
+    const response = await http.get(`/book/${bookId}`, {
+      responseType: "blob",
+    });
+
+    const fileURL = URL.createObjectURL(
+      new Blob([response.data], { type: "application/pdf" })
+    );
+
+    return fileURL;
+  } catch (error) {
     throw error;
   }
 };

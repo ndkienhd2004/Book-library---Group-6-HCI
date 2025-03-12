@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 const PreviewCard = ({ book, open, handleClose }) => {
   const navigate = useNavigate();
   const handleReadBook = () => {
-    navigate(`/books/${book.id}`);
+    navigate(`/books/${book.filename}`);
   };
   if (!book) return null;
   return (

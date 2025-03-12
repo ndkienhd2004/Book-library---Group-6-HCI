@@ -37,7 +37,7 @@ const Uploading = () => {
       setNumPages("");
     },
     onError: (error) => {
-      console.log(error);
+      console.error("Lỗi khi tải sách:", error);
     },
   });
 

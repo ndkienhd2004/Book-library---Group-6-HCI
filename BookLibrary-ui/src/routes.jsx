@@ -10,10 +10,11 @@ import Library from "./pages/library";
 import Uploading from "./pages/uploading";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import BookDetails from "./components/BookDetail/BookDetail";
 import Profile from "./pages/Library/LibraryPage/Profile/Profile";
 import SavedBooks from "./pages/Library/LibraryPage/SavedBooks/SavedBooks";
 import History from "./pages/Library/LibraryPage/History/History";
+import ReadingPage from "./pages/ReadingPage/ReadingPage";
+
 function createRoutes() {
   const routes = useRoutes([
     {
@@ -51,7 +52,7 @@ function createRoutes() {
     },
     {
       path: "/books/:bookid",
-      element: <BookDetails />,
+      element: <ReadingPage />,
     },
   ]);
   return routes;

@@ -1,27 +1,39 @@
-import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Document, Page } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
-const BookDetails = () => {
-  const { bookid } = useParams();
-  const navigate = useNavigate();
-  console.log(bookid);
+const BookDetails = ({ book }) => {
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+    setPageNumber(1);
+  };
+
   return (
-    <section className="book-details">
-      <div className="container">
-        <button
-          type="button"
-          className="flex flex-c back-btn"
-          onClick={() => navigate("/")}
-        >
-          <FaArrowLeft size={22} />
-          <span className="fs-18 fw-6">Go Back</span>
-        </button>
-        <h1>Book Detail</h1>
-        <p style={{ color: "black" }}>Book ID: {bookid}</p>
-      </div>
-    </section>
+    <div>
+      <Document file={book} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>
+        Page {pageNumber} of {numPages || "?"}
+      </p>
+      <button
+        onClick={() => setPageNumber(pageNumber - 1)}
+        disabled={pageNumber <= 1}
+      >
+        Previous
+      </button>
+      <button
+        onClick={() => setPageNumber(pageNumber + 1)}
+        disabled={pageNumber >= numPages}
+      >
+        Next
+      </button>
+    </div>
   );
 };
-export default BookDetails;
 
-const styles = {};
+export default BookDetails;
