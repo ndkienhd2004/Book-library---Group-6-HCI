@@ -1,5 +1,5 @@
 import { borderTop, height, margin, padding, width } from "@mui/system";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import { FaComments } from "react-icons/fa";
 import styled from "styled-components";
@@ -12,6 +12,13 @@ const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const nodeRef = useRef(null);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (input.trim() !== "") {
@@ -50,6 +57,7 @@ const ChatBox = () => {
                   <span>{msg.time}</span>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
             <div style={styles.chatInput}>
               <InputField
@@ -57,6 +65,11 @@ const ChatBox = () => {
                 style={styles.inputField}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSendMessage();
+                  }
+                }}
               />
               <Button sx={styles.chatButton} onClick={handleSendMessage}>
                 <SendIcon fontSize="medium" />
