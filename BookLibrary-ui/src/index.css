@@ -37,3 +37,27 @@ h3 {
     color: #747bff;
   }
 }
+/* Ẩn thanh cuộn trên Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f1f1f1;
+}
+
+/* Tùy chỉnh thanh cuộn trên Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 6px; /* Độ rộng nhỏ */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Màu nền */
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #999; /* Màu thanh cuộn */
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #777; /* Màu khi hover */
+}

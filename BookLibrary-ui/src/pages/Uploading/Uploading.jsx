@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { pdfjs, Document } from "react-pdf";
 import { uploadBook } from "../../apis/book";
 import { useMutation } from "@tanstack/react-query";
+import Loading from "../../components/Loading/Loading";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
 const Uploading = () => {
@@ -10,6 +12,7 @@ const Uploading = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [numPages, setNumPages] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleUploadFile = (e) => {
     const file = e.target.files[0];
@@ -30,11 +33,15 @@ const Uploading = () => {
   const mutation = useMutation({
     mutationFn: uploadBook,
     onSuccess: (data) => {
-      console.log(data);
-      setUploadedfile("");
-      setTitle("");
-      setAuthor("");
-      setNumPages("");
+      setTimeout(() => {
+        console.log(data);
+        setUploadedfile("");
+        setTitle("");
+        setAuthor("");
+        setNumPages(0);
+        setLoading(false);
+        alert("Upload book successfully!");
+      }, 1000);
     },
     onError: (error) => {
       console.error("Lỗi khi tải sách:", error);
@@ -43,6 +50,7 @@ const Uploading = () => {
 
   const handleUploadButtonClicked = async (e) => {
     e.preventDefault();
+    setLoading(true);
     mutation.mutate({
       file: uploadedfile,
       title: title,
@@ -82,22 +90,47 @@ const Uploading = () => {
         </StyledWrapper>
       </div>
       {uploadedfile ? (
-        <div style={{ flexDirection: "column" }}>
-          <h3 style={{ color: "black" }}>Book Information:</h3>
-          <span style={{ color: "black" }}>Title: {title}</span>
-          <br />
-          <span style={{ color: "black" }}>Author: {author}</span>
-          <br />
-          <span style={{ color: "black" }}>numPages: {numPages}</span>
-          <br />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            lineHeight: "1.5",
+          }}
+        >
+          <h3 style={{ color: "black", marginBottom: 4 }}>Book Information:</h3>
+          <span style={{ color: "black", margin: "2px 5px" }}>
+            Title: {title}
+          </span>
+          <span style={{ color: "black", margin: "2px 0" }}>
+            Author: {author}
+          </span>
+          <span style={{ color: "black", margin: "2px 0" }}>
+            numPages: {numPages}
+          </span>
+
           <Document file={uploadedfile} onLoadSuccess={handleLoadSuccess} />
-          <p style={{ color: "black" }}>Selected File: {uploadedfile.name}</p>
-          <button onClick={handleUploadButtonClicked}>Upload book</button>
+
+          {loading ? (
+            <Loading />
+          ) : (
+            <>
+              <p style={{ color: "black", margin: "2px 0" }}>
+                Selected File: {uploadedfile.name}
+              </p>
+              <button
+                onClick={handleUploadButtonClicked}
+                style={{ marginTop: 6 }}
+              >
+                Upload book
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <div style={styles.footer}>
           <h2 style={{ color: "black" }}>PDF, EPUB</h2>
-
           <span style={{ color: "black" }}>
             Upload pdf files that can highlight text for the best experience
           </span>
