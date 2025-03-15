@@ -8,5 +8,6 @@ route.post("/explain", BookController.explainText);
 route.post("/summary", BookController.summaryBook);
 route.post("/update-progress", BookController.updateProgress);
 route.get("/:book_id", BookController.getBook);
+route.get("/uploaded", BookController.getUploadedBook);
 
 module.exports = route;
