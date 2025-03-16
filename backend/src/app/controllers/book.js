@@ -60,7 +60,7 @@ class BookController {
       summary: "",
       nums_page: req.body.nums_page,
       uploaded_date: uploaded_date,
-      cover_image: req.file.filename.replace(".pdf", ".png"),
+      cover_image: req.file.filename.replace(".pdf", "-01.png"),
     });
 
     res.send({ data: new_book.filename });
