@@ -1,7 +1,14 @@
 import React from "react";
 import "./InputField.css";
 
-const InputField = ({ placeholder, style, value, onChange, error }) => {
+const InputField = ({
+  placeholder,
+  style,
+  value,
+  onChange,
+  error,
+  onKeyDown,
+}) => {
   return (
     <div style={{ width: "100%" }}>
       <input
@@ -17,6 +24,7 @@ const InputField = ({ placeholder, style, value, onChange, error }) => {
         }}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
       {error && <p style={styles.errorText}>{error}</p>}{" "}
     </div>

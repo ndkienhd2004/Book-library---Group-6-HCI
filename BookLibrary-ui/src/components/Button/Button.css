@@ -1,4 +1,4 @@
-.button {
+.login-button {
   cursor: pointer;
   position: relative;
   padding: 10px 24px;
@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-.button::before {
+.login-button::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -26,16 +26,16 @@
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.button:hover::before {
+.login-button:hover::before {
   scale: 3;
 }
 
-.button:hover {
+.login-button:hover {
   color: #212121;
   scale: 1.1;
   box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
 }
 
-.button:active {
+.login-button:active {
   scale: 1;
 }

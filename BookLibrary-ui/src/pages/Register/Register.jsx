@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Alert, Snackbar, Stack } from "@mui/material";
 import InputField from "../../components/InputField/InputField";
 import Button from "../../components/Button/Button";
 import RegisterBackgroundImage from "../../assets/images/RegisterBackground.jpg";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import * as auth from "../../apis/auth";
 import AppContext from "../../context/context";
+import Loading from "../../components/Loading/Loading";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ const Register = () => {
   const [fullname, setFullname] = useState("");
   const [fullnameErr, setFullnameErr] = useState("");
   const { login: setAuthToken } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // ✅ Thêm state cho thành công
 
   const onFullnameInputChanged = (e) => {
     setFullname(e.target.value);
@@ -29,18 +33,22 @@ const Register = () => {
     setEmail(e.target.value);
     setEmailErr("");
   };
+
   const onPasswordInputChanged = (e) => {
     setPassword(e.target.value);
     setPasswordErr("");
   };
+
   const onConfirmedPasswordInputChanged = (e) => {
     setConfirmedPassword(e.target.value);
     setConfirmPasswordErr("");
   };
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
+
   const validateForm = () => {
     let valid = true;
     if (email === "") {
@@ -76,91 +84,128 @@ const Register = () => {
   const mutation = useMutation({
     mutationFn: auth.register,
     onSuccess: (data) => {
-      console.log("Register success:", data);
-      navigate("/");
-      setAuthToken(data.data);
+      setSuccessMessage("Đăng ký thành công!"); // ✅ Hiển thị Snackbar thành công
+      setTimeout(() => {
+        setAuthToken(data.data);
+        navigate("/");
+        setLoading(false);
+      }, 500);
     },
     onError: (error) => {
-      alert(
+      setErrorMessage(
         error.response.data.errorResponse.errmsg ||
-          "Registration failed. Please try again."
+          "Đăng ký thất bại. Vui lòng thử lại."
       );
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     },
   });
 
   const handleRegisterButtonClicked = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      mutation.mutate({ email: email, password: password, fullname: fullname });
+      mutation.mutate({ email, password, fullname });
+      setLoading(true);
     } else {
-      console.log("Register failed due to invalid form input.");
+      setErrorMessage("Đăng ký thất bại do nhập sai thông tin.");
     }
   };
+
   return (
-    <Stack sx={styles.Register}>
-      <div style={styles.leftOutline}>
-        <h1 style={styles.Header}>Sign Up</h1>
-        <div style={styles.inputContainer}>
-          <label style={styles.label}>Email</label>
-          <InputField
-            placeholder="Email"
-            style={styles.inputField}
-            value={email}
-            onChange={onEmailInputChanged}
-            error={emailErr}
-          />
+    <>
+      <Stack sx={styles.Register}>
+        <div style={styles.leftOutline}>
+          <h1 style={styles.Header}>Sign Up</h1>
+          <div style={styles.inputContainer}>
+            <label style={styles.label}>Email</label>
+            <InputField
+              placeholder="Email"
+              style={styles.inputField}
+              value={email}
+              onChange={onEmailInputChanged}
+              error={emailErr}
+            />
+          </div>
+          <div style={styles.inputContainer}>
+            <label style={styles.label}>Fullname</label>
+            <InputField
+              placeholder="Enter your fullname"
+              style={styles.inputField}
+              value={fullname}
+              onChange={onFullnameInputChanged}
+              error={fullnameErr}
+            />
+          </div>
+          <div style={styles.inputContainer}>
+            <label style={styles.label}>Password</label>
+            <InputField
+              placeholder="Password"
+              style={styles.inputField}
+              value={password}
+              onChange={onPasswordInputChanged}
+              error={passwordErr}
+            />
+          </div>
+          <div style={styles.inputContainer}>
+            <label style={styles.label}>Repassword</label>
+            <InputField
+              placeholder="Confirm password"
+              style={styles.inputField}
+              value={confirmedPassword}
+              onChange={onConfirmedPasswordInputChanged}
+              error={confirmPasswordErr}
+            />
+          </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <Button
+              placeholder={"REGISTER"}
+              style={{ marginTop: "10px" }}
+              onClick={handleRegisterButtonClicked}
+            />
+          )}
         </div>
-        <div style={styles.inputContainer}>
-          <label style={styles.label}>Fullname</label>
-          <InputField
-            placeholder="Enter your fullname"
-            style={styles.inputField}
-            value={fullname}
-            onChange={onFullnameInputChanged}
-            error={fullnameErr}
-          />
+        <div style={styles.rightOutline}>
+          <div style={styles.rightOutlineText}>
+            <h3
+              style={{
+                color: "#34312D",
+                marginBottom: "0px",
+                fontSize: "24px",
+              }}
+            >
+              Hey
+            </h3>
+            <h3 style={{ color: "#34312D", fontSize: "24px" }}>
+              Sign up now to explore an unlimited world of books!
+            </h3>
+          </div>
         </div>
-        <div style={styles.inputContainer}>
-          <label style={styles.label}>Password</label>
-          <InputField
-            placeholder="Password"
-            style={styles.inputField}
-            value={password}
-            onChange={onPasswordInputChanged}
-            error={passwordErr}
-          />
-        </div>
-        <div style={styles.inputContainer}>
-          <label style={styles.label}>Repassword</label>
-          <InputField
-            placeholder="Confirm password"
-            style={styles.inputField}
-            value={confirmedPassword}
-            onChange={onConfirmedPasswordInputChanged}
-            error={confirmPasswordErr ? "Invalid email format" : ""}
-          />
-        </div>
-        <Button
-          placeholder={"REGISTER"}
-          style={{ marginTop: "10px" }}
-          onClick={(e) => handleRegisterButtonClicked(e)}
-        />
-      </div>
-      <div style={styles.rightOutline}>
-        <div style={styles.rightOutlineText}>
-          <h3
-            style={{ color: "#34312D", marginBottom: "0px", fontSize: "24px" }}
-          >
-            Hey
-          </h3>
-          <h3 style={{ color: "#34312D", fontSize: "24px" }}>
-            Sign up now to explore an unlimited world of books!{" "}
-          </h3>
-        </div>
-      </div>
-    </Stack>
+      </Stack>
+
+      {/* ✅ Snackbar hiển thị lỗi */}
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={3000}
+        onClose={() => setErrorMessage("")}
+      >
+        <Alert severity="error">{errorMessage}</Alert>
+      </Snackbar>
+
+      {/* ✅ Snackbar hiển thị thành công */}
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage("")}
+      >
+        <Alert severity="success">{successMessage}</Alert>
+      </Snackbar>
+    </>
   );
 };
+
 export default Register;
 
 const styles = {

@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Alert, Snackbar, Stack } from "@mui/material";
 import InputField from "../../components/InputField/InputField";
 import Button from "../../components/Button/Button";
 import loginBackgroundImage from "../../assets/images/LoginBackground.png";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import * as auth from "../../apis/auth";
 import AppContext from "../../context/context";
+import Loading from "../../components/Loading/Loading";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,14 +16,26 @@ const Login = () => {
   const [userEmailErr, setUserEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const { login: setAuthToken } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const mutation = useMutation({
     mutationFn: auth.login,
     onSuccess: (data) => {
-      navigate("/");
-      setAuthToken(data.data);
+      setSuccessMessage("Login successful!");
+      setTimeout(() => {
+        setAuthToken(data.data);
+        navigate("/");
+        setLoading(false);
+      }, 500);
     },
+
     onError: (error) => {
-      alert(error || "Login failed. Please try again.");
+      setErrorMessage(error.response.data || "Login failed. Please try again.");
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     },
   });
 
@@ -55,54 +68,81 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       mutation.mutate({ email: email, password: password });
+      setLoading(true);
     } else {
-      console.log("Login failed");
+      setErrorMessage("Login failed due to invalid form input.");
     }
   };
 
   return (
-    <Stack sx={styles.Login}>
-      <div style={styles.leftOutline}>
-        <h1 style={styles.Header}>Sign In</h1>
-        <div style={styles.inputContainer}>
-          <label style={styles.label}>Email</label>
-          <InputField
-            placeholder="Email"
-            style={styles.inputField}
-            value={email}
-            onChange={onUsernameInputChanged}
-            error={userEmailErr}
-          />
+    <>
+      <Stack sx={styles.Login}>
+        <div style={styles.leftOutline}>
+          <h1 style={styles.Header}>Sign In</h1>
+          <div style={styles.inputContainer}>
+            <label style={styles.label}>Email</label>
+            <InputField
+              placeholder="Email"
+              style={styles.inputField}
+              value={email}
+              onChange={onUsernameInputChanged}
+              error={userEmailErr}
+            />
+          </div>
+          <div style={styles.inputContainer}>
+            <label style={styles.label}>Password</label>
+            <InputField
+              placeholder="Password"
+              style={styles.inputField}
+              value={password}
+              onChange={onPasswordInputChanged}
+              error={passwordErr}
+            />
+          </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <Button
+              placeholder={"LOGIN"}
+              style={{ marginTop: "10px" }}
+              onClick={(e) => handleLoginButtonClicked(e)}
+            />
+          )}
         </div>
-        <div style={styles.inputContainer}>
-          <label style={styles.label}>Password</label>
-          <InputField
-            placeholder="Password"
-            style={styles.inputField}
-            value={password}
-            onChange={onPasswordInputChanged}
-            error={passwordErr}
-          />
+        <div style={styles.rightOutline}>
+          <div style={styles.rightOutlineText}>
+            <h3
+              style={{
+                color: "#34312D",
+                marginBottom: "0px",
+                fontSize: "24px",
+              }}
+            >
+              Hey
+            </h3>
+            <h3 style={{ color: "#34312D", fontSize: "24px" }}>
+              Welcome to BookLibrary
+            </h3>
+          </div>
         </div>
-        <Button
-          placeholder={"LOGIN"}
-          style={{ marginTop: "10px" }}
-          onClick={(e) => handleLoginButtonClicked(e)}
-        />
-      </div>
-      <div style={styles.rightOutline}>
-        <div style={styles.rightOutlineText}>
-          <h3
-            style={{ color: "#34312D", marginBottom: "0px", fontSize: "24px" }}
-          >
-            Hey
-          </h3>
-          <h3 style={{ color: "#34312D", fontSize: "24px" }}>
-            Welcome to BookLibrary
-          </h3>
-        </div>
-      </div>
-    </Stack>
+      </Stack>
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={3000}
+        onClose={() => setErrorMessage("")}
+      >
+        <Alert severity="error">{errorMessage}</Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSuccessMessage("");
+        }}
+      >
+        <Alert severity="success">{successMessage}</Alert>
+      </Snackbar>
+    </>
   );
 };
 export default Login;
