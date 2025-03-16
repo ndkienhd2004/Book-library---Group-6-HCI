@@ -1,7 +1,7 @@
 const fs = require("fs");
-const pdf = require("pdf-parse");
 const Book = require("../models/book");
 const path = require("path");
+const poppler = require("pdf-poppler");
 
 class BookController {
   async summaryBook(req, res) {
@@ -28,12 +28,28 @@ class BookController {
 
   async uploadBook(req, res) {
     const uploaded_date = new Date();
-    console.log(req.file.path);
 
-    const pdfBuffer = fs.readFileSync(req.file.path);
-    const pdfData = await pdf(pdfBuffer);
-    const content = pdfData.text;
-    let summary = "";
+    const pdfPath = path.join(
+      __dirname,
+      "../../public/book/",
+      req.file.filename
+    );
+
+    const outputDir = path.join(__dirname, "../../public/img");
+
+    const outputFilename = req.file.filename.replace(".pdf", ".png");
+
+    if (!fs.existsSync(imgDir)) {
+      fs.mkdirSync(imgDir, { recursive: true });
+    }
+
+    await poppler.convert(pdfPath, {
+      format: "png",
+      out_dir: outputDir,
+      out_prefix: outputFilename.replace(".png", ""),
+      page: 1,
+      scale: 1024,
+    });
 
     const new_book = await Book.create({
       filename: req.file.filename,
@@ -41,9 +57,10 @@ class BookController {
       owner: req.user_id,
       title: req.body.title,
       author: req.body.author,
-      summary: summary,
+      summary: "",
       nums_page: req.body.nums_page,
       uploaded_date: uploaded_date,
+      cover_image: req.file.filename.replace(".pdf", ".png"),
     });
 
     res.send({ data: new_book.filename });
@@ -81,9 +98,21 @@ class BookController {
     res.send("Update successfully");
   }
 
+  async getUploadedBook(req, res) {
+    const { user_id } = req;
+    try {
+      const list_books = await Book.find({ owner: user_id }).sort({
+        uploaded_date: -1,
+      });
+      res.send(list_books);
+    } catch (error) {
+      res.status(500).send({ message: "Error fetching books", error });
+    }
+  }
+
   async getBook(req, res) {
     const { book_id } = req.params;
-    
+
     const filePath = path.join(__dirname, "../../public/book", `${book_id}`);
 
     res.sendFile(filePath, (err) => {

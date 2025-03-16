@@ -1,17 +1,17 @@
-### Cach su dung backend
+# Cach su dung backend
 
-### API cho frondend
+## API cho frondend
 
-## GET /list-book
+### GET /list-books
 
-## POST /auth/login và /auth/register
+### POST /auth/login và /auth/register
 
 ```javascript
 // Nhận vào:
 {
   "email": value,
   "password": value,
-  "fullname": value //chỉ áp dụng cho register
+  "fullname": value //dành cho register
 }
 //Trả về:
 {
@@ -25,9 +25,9 @@
 }
 ```
 
-## GET /auth/logout
+### GET /auth/logout
 
-## POST /book/upload
+### POST /book/upload
 
 ```javascript
 // Nhận vào
@@ -40,4 +40,12 @@
 }
 ```
 
-## GET /list-book
+### GET /book/uploaded-books
+
+### lấy dữ liệu từ sách, ảnh từ backend
+
+file sách:
+http://localhost:8000/public/book/filename.pdf
+
+file ảnh:
+http://localhost:8000/public/img/filename.png

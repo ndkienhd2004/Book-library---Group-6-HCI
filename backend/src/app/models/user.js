@@ -5,6 +5,7 @@ const UserSchema = new moongose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   fullname: { type: String },
+  avatar: { type: String, default: "default-avatar.jpg" },
 });
 
 UserSchema.pre("save", async function (next) {

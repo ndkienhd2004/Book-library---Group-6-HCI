@@ -11,6 +11,7 @@ const BookSchema = new mongoose.Schema({
   uploaded_date: { type: Date, default: Date.now },
   last_read_date: { type: Date, default: Date.now },
   last_read_page: { type: Number, default: 0 },
+  cover_image: { type: String, default: "default-cover.jpg" },
 });
 
 module.exports = mongoose.model("Book", BookSchema);
