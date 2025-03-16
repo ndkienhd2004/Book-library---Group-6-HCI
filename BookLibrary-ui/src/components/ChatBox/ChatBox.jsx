@@ -7,18 +7,44 @@ import InputField from "../InputField/InputField";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import zIndex from "@mui/material/styles/zIndex";
+import { io } from "socket.io-client";
+
+const useSocket = (() => {
+  let socketInstance = null;
+  return () => {
+    if (!socketInstance) {
+      socketInstance = io("http://localhost:8000");
+    }
+    return socketInstance;
+  };
+})();
+
 const ChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const nodeRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const socket = useRef(useSocket()).current;
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  useEffect(() => {
+    socket.on("chat message", (msg) => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "Bot", text: msg },
+      ]);
+    });
+
+    return () => {
+      socket.off("chat message");
+    };
+  }, []);
 
   const handleSendMessage = () => {
     if (input.trim() !== "") {
@@ -31,6 +57,7 @@ const ChatBox = () => {
         // }),
       };
       setMessages([...messages, newMessage]);
+      socket.emit("chat message", newMessage.text);
       setInput("");
     }
   };
@@ -155,7 +182,7 @@ const styles = {
     color: "black",
     padding: "0px 12px",
     borderRadius: "12px",
-    maxWidth: "80%",
+    maxWidth: "40%",
     wordBreak: "break-word",
     display: "flex",
     flexDirection: "column",
