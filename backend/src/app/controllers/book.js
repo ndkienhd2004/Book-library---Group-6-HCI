@@ -35,9 +35,9 @@ class BookController {
       req.file.filename
     );
 
-    const outputDir = path.join(__dirname, "../../public/img");
+    const imgDir = path.join(__dirname, "../../public/img");
 
-    const outputFilename = req.file.filename.replace(".pdf", ".png");
+    const imgFileName = req.file.filename.replace(".pdf", ".png");
 
     if (!fs.existsSync(imgDir)) {
       fs.mkdirSync(imgDir, { recursive: true });
@@ -45,8 +45,8 @@ class BookController {
 
     await poppler.convert(pdfPath, {
       format: "png",
-      out_dir: outputDir,
-      out_prefix: outputFilename.replace(".png", ""),
+      out_dir: imgDir,
+      out_prefix: imgFileName.replace(".png", ""),
       page: 1,
       scale: 1024,
     });
