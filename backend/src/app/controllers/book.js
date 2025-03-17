@@ -2,7 +2,6 @@ const fs = require("fs");
 const Book = require("../models/book");
 const path = require("path");
 const poppler = require("pdf-poppler");
-const { fromPath } = require("pdf2pic");
 
 class BookController {
   async summaryBook(req, res) {
@@ -30,7 +29,6 @@ class BookController {
   async uploadBook(req, res) {
     const uploaded_date = new Date();
 
-    // extract cover image
     const pdfPath = path.join(
       __dirname,
       "../../public/book/",
@@ -39,31 +37,33 @@ class BookController {
 
     const imgDir = path.join(__dirname, "../../public/img");
 
-    const imgFileName = req.file.filename.replace(".pdf", "");
+    const imgFileName = req.file.filename.replace(".pdf", ".png");
 
     if (!fs.existsSync(imgDir)) {
       fs.mkdirSync(imgDir, { recursive: true });
     }
 
-    const options = {
-      density: 100,
-      saveFilename: imgFileName,
-      savePath: imgDir,
+    await poppler.convert(pdfPath, {
       format: "png",
-      // width: 600,
-      // height: 600,
-    };
-
-    const convert = fromPath(pdfPath, options);
-    const pageToConvertAsImage = 1;
-
-    convert(pageToConvertAsImage, { responseType: "image" }).then((resolve) => {
-      console.log("Cover extraction successful");
-
-      return resolve;
+      out_dir: imgDir,
+      out_prefix: imgFileName.replace(".png", ""),
+      page: 1,
+      scale: 1024,
     });
 
-    // upload to database
+    const files = fs.readdirSync(imgDir);
+
+    const matchingFile = files.find((file) =>
+      file.startsWith(imgFileName.replace(".png", ""))
+    );
+
+    const oldPath = path.join(imgDir, matchingFile);
+    const newPath = path.join(imgDir, imgFileName);
+
+    if (fs.existsSync(oldPath)) {
+      fs.renameSync(oldPath, newPath);
+    }
+
     const new_book = await Book.create({
       filename: req.file.filename,
       name: req.file.originalname,
@@ -73,7 +73,7 @@ class BookController {
       summary: "",
       nums_page: req.body.nums_page,
       uploaded_date: uploaded_date,
-      cover_image: req.file.filename.replace(".pdf", "-01.png"),
+      cover_image: imgFileName,
     });
 
     res.send({ data: new_book.filename });
