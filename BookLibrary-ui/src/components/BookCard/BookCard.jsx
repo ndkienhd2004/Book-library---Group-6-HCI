@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./BookCard.css";
 import { useNavigate } from "react-router-dom";
 import PreviewCard from "./PreviewCard";
+import { getBookImage } from "../../apis/book";
 
 const BookCard = ({ book }) => {
   const navigate = useNavigate();
@@ -12,6 +13,15 @@ const BookCard = ({ book }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const fetchBookImage = async () => {
+    try {
+      const bookImage = await getBookImage(book.cover_image);
+      return bookImage;
+    } catch (error) {
+      console.error("Error fetching book image:", error);
+    }
+  };
+
   return (
     <div style={styles.container}>
       <div style={{ ...styles.card, backgroundImage: `url(${book.image})` }}>

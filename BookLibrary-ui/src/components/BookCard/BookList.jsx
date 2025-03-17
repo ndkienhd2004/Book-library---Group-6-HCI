@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "./BookCard";
-import { getLibrary } from "../../apis/book";
+import { getBookImage, getLibrary } from "../../apis/book";
 
 /**
  * @typedef {Object} Book
@@ -17,15 +17,33 @@ import { getLibrary } from "../../apis/book";
  * @property {number} last_read_page
  */
 
-const BookList = ({ books }) => (
-  <div style={styles.booklist}>
-    {books.length > 0 ? (
-      books.map((book) => <BookCard key={book._id} book={book} />)
-    ) : (
-      <p>No book in Library</p>
-    )}
-  </div>
-);
+const BookList = ({ books }) => {
+  const [booksImage, setBooksImage] = useState([]);
+
+  useEffect(() => {
+    const fetchBooksImage = async () => {
+      for (const book of books) {
+        try {
+          const bookImage = await getBookImage(book.cover_image);
+          setBooksImage((prevBooksImage) => [...prevBooksImage, bookImage]);
+        } catch (err) {
+          console.error("Error fetching books image:");
+        }
+      }
+    };
+    fetchBooksImage();
+  }, [books]);
+
+  return (
+    <div style={styles.booklist}>
+      {books.length > 0 ? (
+        books.map((book) => <BookCard key={book._id} book={book} />)
+      ) : (
+        <p>No book in Library</p>
+      )}
+    </div>
+  );
+};
 
 export default BookList;
 
