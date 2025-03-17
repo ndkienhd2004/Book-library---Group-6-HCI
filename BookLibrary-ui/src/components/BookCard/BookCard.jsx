@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./BookCard.css";
 import { useNavigate } from "react-router-dom";
 import PreviewCard from "./PreviewCard";
@@ -7,24 +7,27 @@ import { getBookImage } from "../../apis/book";
 const BookCard = ({ book }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [image, setImage] = useState("");
   const handleDetailButtonClicked = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const fetchBookImage = async () => {
-    try {
-      const bookImage = await getBookImage(book.cover_image);
-      return bookImage;
-    } catch (error) {
-      console.error("Error fetching book image:", error);
-    }
-  };
-
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const respond = await getBookImage(book.cover_image);
+        setImage(respond);
+      } catch (error) {
+        console.error(`Error fetching image for book ${book.id}:`, error);
+      }
+    };
+    fetchImages();
+  }, [book]);
   return (
     <div style={styles.container}>
-      <div style={{ ...styles.card, backgroundImage: `url(${book.image})` }}>
+      <div style={{ ...styles.card, backgroundImage: `url(${image})` }}>
         <div style={styles.content}>
           <div style={styles.genre}>{book.genre}</div>
           <div style={{ marginBottom: "15px" }}>
