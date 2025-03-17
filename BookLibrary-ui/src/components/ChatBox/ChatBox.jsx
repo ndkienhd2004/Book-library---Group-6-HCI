@@ -69,61 +69,57 @@ const ChatBox = () => {
     }
   };
   return (
-    <Draggable nodeRef={nodeRef} bounds="parent">
-      <div ref={nodeRef} style={styles.chatContainer}>
-        {isOpen && (
-          <div style={styles.chatBox}>
-            <div style={styles.chatHeader}>
-              <span>Chat with Support</span>
-              <button onClick={() => setIsOpen(false)}>✖</button>
-            </div>
-            <div style={styles.chatMessages}>
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  style={
-                    msg.sender === "You"
-                      ? styles.userMessage
-                      : styles.botMessage
-                  }
-                >
-                  <p>{msg.text}</p>
-                  <span>{msg.time}</span>
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-            <div style={styles.chatInput}>
-              <InputField
-                placeholder="Type a message..."
-                style={styles.inputField}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSendMessage();
-                  }
-                }}
-              />
-              <Button sx={styles.chatButton} onClick={handleSendMessage}>
-                <SendIcon fontSize="medium" />
-              </Button>
-            </div>
+    <div ref={nodeRef} style={styles.chatContainer}>
+      {isOpen && (
+        <div style={styles.chatBox}>
+          <div style={styles.chatHeader}>
+            <span>Chat with Support</span>
+            <button onClick={() => setIsOpen(false)}>✖</button>
           </div>
-        )}
-        <StyledWrapper>
-          <div className="container" onClick={() => setIsOpen(!isOpen)}>
-            <div className="toggle">
-              <input type="checkbox" />
-              <span className="button" />
-              <span className="label">
-                <FaComments />
-              </span>
-            </div>
+          <div style={styles.chatMessages}>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                style={
+                  msg.sender === "You" ? styles.userMessage : styles.botMessage
+                }
+              >
+                <p>{msg.text}</p>
+                <span>{msg.time}</span>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
-        </StyledWrapper>
-      </div>
-    </Draggable>
+          <div style={styles.chatInput}>
+            <InputField
+              placeholder="Type a message..."
+              style={styles.inputField}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage();
+                }
+              }}
+            />
+            <Button sx={styles.chatButton} onClick={handleSendMessage}>
+              <SendIcon fontSize="medium" />
+            </Button>
+          </div>
+        </div>
+      )}
+      <StyledWrapper>
+        <div className="container" onClick={() => setIsOpen(!isOpen)}>
+          <div className="toggle">
+            <input type="checkbox" />
+            <span className="button" />
+            <span className="label">
+              <FaComments />
+            </span>
+          </div>
+        </div>
+      </StyledWrapper>
+    </div>
   );
 };
 

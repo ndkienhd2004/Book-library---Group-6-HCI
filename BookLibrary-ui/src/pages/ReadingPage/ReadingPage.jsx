@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 const ReadingPage = () => {
   const { bookid } = useParams();
   const [book, setBook] = useState(null);
+
   const mutation = useMutation({
     mutationFn: getBookById,
     onSuccess: (data) => {
       setBook(data);
-      console.log(data);
     },
     onError: (error) => {
       console.error("Lỗi khi lấy sách:", error);
