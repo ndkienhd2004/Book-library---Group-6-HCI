@@ -59,3 +59,19 @@ export const getBookById = async (bookId) => {
     throw error;
   }
 };
+
+export const getBookImage = async (bookImg) => {
+  try {
+    const response = await http.get(`/public/img/${bookImg}`, {
+      responseType: "blob",
+    });
+
+    const imageURL = URL.createObjectURL(
+      new Blob([response.data], { type: "image/jpeg" })
+    );
+
+    return imageURL;
+  } catch (error) {
+    throw error;
+  }
+};

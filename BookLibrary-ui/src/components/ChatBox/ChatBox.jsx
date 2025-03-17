@@ -1,4 +1,11 @@
-import { borderTop, height, margin, padding, width } from "@mui/system";
+import {
+  borderTop,
+  height,
+  margin,
+  maxWidth,
+  padding,
+  width,
+} from "@mui/system";
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import { FaComments } from "react-icons/fa";
@@ -128,6 +135,9 @@ const styles = {
     bottom: "20px",
     right: "20px",
     display: "flex",
+    maxWidth: "500px",
+    width: "500px",
+    padding: "10px",
     flexDirection: "column",
     alignItems: "flex-end",
     cursor: "grab",
@@ -147,8 +157,7 @@ const styles = {
     justifyContent: "space-between",
     fontWeight: "bold",
     backgroundColor: "#c8a17a",
-    width: "300px",
-    padding: "10px",
+    width: "100%",
     height: "30px",
     alignItems: "center",
   },
