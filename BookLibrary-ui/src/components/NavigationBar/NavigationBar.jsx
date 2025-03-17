@@ -3,13 +3,15 @@ import PATH from "../../constants/path";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Button, Menu, MenuItem } from "@mui/material";
 import SearchBar from "../SearchBar/SearchBar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../context/context";
 import ProfileImage from "../../assets/images/profile.png";
+import { getImage } from "../../apis/book";
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get current path dynamically
-  const { auth, name, logout } = useContext(AppContext);
+  const { auth, name, logout, userImage } = useContext(AppContext);
+  const [avatar, setAvatar] = useState(ProfileImage);
   const handleNavigate = (path) => {
     navigate(path);
   };
@@ -29,7 +31,18 @@ const NavBar = () => {
     navigate(PATH.library);
     handleClose();
   };
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await getImage(userImage);
+        setAvatar(response);
+      } catch (error) {
+        setAvatar(ProfileImage);
+      }
+    };
 
+    fetchImages();
+  }, [userImage]);
   const navItems = [
     { text: "Home", path: PATH.home },
     { text: "My Library", path: PATH.library },
@@ -60,11 +73,7 @@ const NavBar = () => {
           <SearchBar />
           <div style={styles.profileContainer} onClick={handleProfileClick}>
             <div style={styles.profileImageContainer}>
-              <img
-                src={ProfileImage}
-                alt="Profile"
-                style={styles.profileImage}
-              />
+              <img src={avatar} alt="Profile" style={styles.profileImage} />
             </div>
             <span style={styles.profileName}>{String(name) || "Guest"}</span>
           </div>
