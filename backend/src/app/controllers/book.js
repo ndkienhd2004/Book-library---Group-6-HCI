@@ -51,6 +51,19 @@ class BookController {
       scale: 1024,
     });
 
+    const files = fs.readdirSync(imgDir);
+
+    const matchingFile = files.find((file) =>
+      file.startsWith(imgFileName.replace(".png", ""))
+    );
+
+    const oldPath = path.join(imgDir, matchingFile);
+    const newPath = path.join(imgDir, imgFileName);
+
+    if (fs.existsSync(oldPath)) {
+      fs.renameSync(oldPath, newPath);
+    }
+
     const new_book = await Book.create({
       filename: req.file.filename,
       name: req.file.originalname,
@@ -60,7 +73,7 @@ class BookController {
       summary: "",
       nums_page: req.body.nums_page,
       uploaded_date: uploaded_date,
-      cover_image: req.file.filename.replace(".pdf", "-01.png"),
+      cover_image: imgFileName,
     });
 
     res.send({ data: new_book.filename });

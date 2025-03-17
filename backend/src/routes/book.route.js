@@ -1,7 +1,7 @@
 const express = require("express");
 const route = express.Router();
-const BookController = require("../app/controllers/book");
-const { upload } = require("../app/middlewares/multer");
+const BookController = require("../app/controllers/book.js");
+const { upload } = require("../app/middlewares/multer.js");
 const generateSpeech = require("../services/google-cloud-tts.service.js");
 
 route.post("/upload", upload.single("book"), BookController.uploadBook);
