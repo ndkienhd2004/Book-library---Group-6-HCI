@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 const UserSchema = new moongose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  fullname: { type: String },
-  avatar: { type: String, default: "default-avatar.jpg" },
+  fullname: { type: String, default: "user001" },
+  avatar: { type: String, default: "default.png" },
 });
 
 UserSchema.pre("save", async function (next) {

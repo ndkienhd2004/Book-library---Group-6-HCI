@@ -2,6 +2,7 @@ const fs = require("fs");
 const Book = require("../models/book");
 const path = require("path");
 const poppler = require("pdf-poppler");
+const { fromPath } = require("pdf2pic");
 
 class BookController {
   async summaryBook(req, res) {
@@ -29,6 +30,7 @@ class BookController {
   async uploadBook(req, res) {
     const uploaded_date = new Date();
 
+    // extract cover image
     const pdfPath = path.join(
       __dirname,
       "../../public/book/",
@@ -37,20 +39,31 @@ class BookController {
 
     const imgDir = path.join(__dirname, "../../public/img");
 
-    const imgFileName = req.file.filename.replace(".pdf", ".png");
+    const imgFileName = req.file.filename.replace(".pdf", "");
 
     if (!fs.existsSync(imgDir)) {
       fs.mkdirSync(imgDir, { recursive: true });
     }
 
-    await poppler.convert(pdfPath, {
+    const options = {
+      density: 100,
+      saveFilename: imgFileName,
+      savePath: imgDir,
       format: "png",
-      out_dir: imgDir,
-      out_prefix: imgFileName.replace(".png", ""),
-      page: 1,
-      scale: 1024,
+      // width: 600,
+      // height: 600,
+    };
+
+    const convert = fromPath(pdfPath, options);
+    const pageToConvertAsImage = 1;
+
+    convert(pageToConvertAsImage, { responseType: "image" }).then((resolve) => {
+      console.log("Cover extraction successful");
+
+      return resolve;
     });
 
+    // upload to database
     const new_book = await Book.create({
       filename: req.file.filename,
       name: req.file.originalname,
