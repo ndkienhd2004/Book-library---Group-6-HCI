@@ -18,22 +18,6 @@ import { getBookImage, getLibrary } from "../../apis/book";
  */
 
 const BookList = ({ books }) => {
-  const [booksImage, setBooksImage] = useState([]);
-
-  useEffect(() => {
-    const fetchBooksImage = async () => {
-      for (const book of books) {
-        try {
-          const bookImage = await getBookImage(book.cover_image);
-          setBooksImage((prevBooksImage) => [...prevBooksImage, bookImage]);
-        } catch (err) {
-          console.error("Error fetching books image:");
-        }
-      }
-    };
-    fetchBooksImage();
-  }, [books]);
-
   return (
     <div style={styles.booklist}>
       {books.length > 0 ? (
