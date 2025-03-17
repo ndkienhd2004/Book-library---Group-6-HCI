@@ -60,7 +60,7 @@ export const getBookById = async (bookId) => {
   }
 };
 
-export const getBookImage = async (bookImg) => {
+export const getImage = async (bookImg) => {
   try {
     const response = await http.get(`/public/img/${bookImg}`, {
       responseType: "blob",

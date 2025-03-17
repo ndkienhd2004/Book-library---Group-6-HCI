@@ -29,7 +29,7 @@ const PreviewCard = ({ book, open, handleClose }) => {
         {/* Phần trên (60%) */}
         <Box sx={styles.topSection}>
           <Box sx={styles.leftOutline}>
-            <img src={book.img} alt={book.title} style={styles.image} />
+            <img src={book.image} alt={book.title} style={styles.image} />
           </Box>
           <Box sx={styles.rightOutLine}>
             <Typography
@@ -124,8 +124,8 @@ const styles = {
     flexDirection: "column",
   },
   image: {
-    maxWidth: "100px",
-    maxHeight: "200px",
+    maxWidth: "200px",
+    maxHeight: "300px",
     borderRadius: "5px",
   },
   bottomSection: {

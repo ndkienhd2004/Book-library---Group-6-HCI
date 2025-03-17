@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./BookCard.css";
 import { useNavigate } from "react-router-dom";
 import PreviewCard from "./PreviewCard";
-import { getBookImage } from "../../apis/book";
+import { getImage } from "../../apis/book";
 
 const BookCard = ({ book }) => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const BookCard = ({ book }) => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const respond = await getBookImage(book.cover_image);
+        const respond = await getImage(book.cover_image);
         setImage(respond);
       } catch (error) {
         console.error(`Error fetching image for book ${book.id}:`, error);
@@ -55,7 +55,11 @@ const BookCard = ({ book }) => {
           </button>
         </div>
       </div>
-      <PreviewCard book={book} open={open} handleClose={handleClose} />
+      <PreviewCard
+        book={{ ...book, image: image }}
+        open={open}
+        handleClose={handleClose}
+      />
     </div>
   );
 };

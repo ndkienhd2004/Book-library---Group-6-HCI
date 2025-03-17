@@ -3,11 +3,25 @@ import LibraryImage from "../../assets/images/MyLibrary.jpg";
 import ProfileImage from "../../assets/images/profile.png";
 import Footer from "../../components/Footer/Footer";
 import { Outlet } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../context/context";
 
 const Library = () => {
-  const { name } = useContext(AppContext);
+  const { name, userImage } = useContext(AppContext);
+  const [avatar, setAvatar] = useState(ProfileImage);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await getImage(userImage);
+        setAvatar(response);
+      } catch (error) {
+        setAvatar(ProfileImage);
+      }
+    };
+
+    fetchImages();
+  }, [userImage]);
   return (
     <div style={styles.container}>
       <div
@@ -15,7 +29,7 @@ const Library = () => {
       >
         <div style={styles.profileContainer}>
           <div style={styles.profileImageContainer}>
-            <img src={ProfileImage} alt="Profile" style={styles.profileImage} />
+            <img src={avatar} alt="Profile" style={styles.profileImage} />
           </div>
           <span style={styles.profileName}>{String(name) || "Guest"}</span>
         </div>

@@ -18,3 +18,13 @@ export const getUsername = () => {
 export const deleteUsername = () => {
   localStorage.removeItem("username");
 };
+
+export const setUserImage = (img) => {
+  localStorage.setItem("userImage", img);
+};
+export const getUserImage = () => {
+  return localStorage.getItem("userImage") || "";
+};
+export const deleteUserImage = () => {
+  localStorage.removeItem("userImage");
+};

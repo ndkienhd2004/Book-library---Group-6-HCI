@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "./BookCard";
-import { getBookImage, getLibrary } from "../../apis/book";
 
 /**
  * @typedef {Object} Book
