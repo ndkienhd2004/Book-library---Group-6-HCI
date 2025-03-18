@@ -69,7 +69,14 @@ const ChatBox = () => {
     }
   };
   return (
-    <div ref={nodeRef} style={styles.chatContainer}>
+    <div
+      ref={nodeRef}
+      style={
+        isOpen
+          ? styles.chatContainer
+          : { position: "fixed", bottom: "20px", right: "20px", zIndex: 9999 }
+      }
+    >
       {isOpen && (
         <div style={styles.chatBox}>
           <div style={styles.chatHeader}>
