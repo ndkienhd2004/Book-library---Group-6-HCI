@@ -75,3 +75,25 @@ export const getImage = async (bookImg) => {
     throw error;
   }
 };
+
+export const getAudio = async (text) => {
+  try {
+    const response = await http.post(
+      "/book/tts",
+      { text },
+      { responseType: "blob" }
+    );
+
+    if (response.data.size === 0) {
+      throw new Error("Received empty audio file.");
+    }
+
+    const url = URL.createObjectURL(
+      new Blob([response.data], { type: "audio/mpeg" })
+    );
+    return url;
+  } catch (err) {
+    console.error("Error fetching audio:", err);
+    throw err;
+  }
+};

@@ -32,31 +32,25 @@ const BookDetails = ({ book }) => {
 
       const menuWidth = 125;
       const menuHeight = 122;
-      const margin = 16; // Khoảng cách menu với chữ
+      const margin = 16;
 
       let posX = rect.left - docRect.left + scrollX;
       let posY = rect.top - docRect.top + scrollY;
 
-      // Giới hạn vị trí trong documentContainer
       const maxX = docRect.width - menuWidth - margin;
       const maxY = docRect.height - menuHeight - margin;
       const midX = docRect.width / 2;
       const midY = docRect.height / 2;
 
-      // Điều chỉnh hướng hiển thị thông minh
       if (posX < midX) {
-        // Nếu click bên trái màn hình → Hiển thị bên phải chữ
         posX = Math.min(posX + rect.width + margin, maxX);
       } else {
-        // Nếu click bên phải màn hình → Hiển thị bên trái chữ
         posX = Math.max(posX - menuWidth - margin, margin);
       }
 
       if (posY < midY) {
-        // Nếu click gần mép trên → Hiển thị phía dưới chữ
         posY = Math.min(posY + rect.height + margin, maxY);
       } else {
-        // Nếu click gần mép dưới → Hiển thị phía trên chữ
         posY = Math.max(posY - menuHeight - margin, margin);
       }
 
