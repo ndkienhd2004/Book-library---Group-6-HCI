@@ -98,7 +98,7 @@ const BookDetails = ({ book }) => {
           />
         )}
       </div>
-      <p>
+      <p style={{ color: "black" }}>
         Page {pageNumber} of {numPages || "?"}
       </p>
       <button
