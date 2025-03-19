@@ -12,7 +12,6 @@ const ReadingTimer = ({ time }) => {
       }, 1000);
     }
 
-    // Xử lý khi người dùng rời khỏi hoặc quay lại tab
     const handleVisibilityChange = () => {
       setIsActive(!document.hidden);
     };
