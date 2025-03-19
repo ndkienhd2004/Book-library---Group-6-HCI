@@ -3,6 +3,8 @@ import BookDetails from "../../components/BookDetail/BookDetail";
 import { useMutation } from "@tanstack/react-query";
 import { getBookById } from "../../apis/book";
 import { useEffect, useState } from "react";
+import SupportReadingTools from "../../components/SupportReadingTools/SupportReadingTools";
+import ReadingTimer from "../../components/ReadingTimer/ReadingTimer";
 
 const ReadingPage = () => {
   const { bookid } = useParams();
@@ -25,10 +27,23 @@ const ReadingPage = () => {
   }, [bookid]);
 
   return (
-    <div>
+    <div style={styles.container}>
+      <ReadingTimer />
       <BookDetails book={book} />
+      <SupportReadingTools />
     </div>
   );
 };
 
 export default ReadingPage;
+
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "3%  ",
+    width: "100%",
+  },
+};
