@@ -8,6 +8,7 @@ const BookSchema = new mongoose.Schema({
   summary: { type: String, default: "No summary for this book." },
   title: { type: String },
   nums_page: { type: Number },
+  total_reading_time: { type: Number, default: 0 },
   uploaded_date: { type: Date, default: Date.now },
   last_read_date: { type: Date, default: Date.now },
   last_read_page: { type: Number, default: 0 },
