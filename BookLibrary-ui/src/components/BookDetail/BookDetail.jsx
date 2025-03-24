@@ -30,8 +30,8 @@ const BookDetails = ({ book }) => {
       const scrollX = documentContainer.scrollLeft;
       const scrollY = documentContainer.scrollTop;
 
-      const menuWidth = 125;
-      const menuHeight = 122;
+      const menuWidth = 136;
+      const menuHeight = 104;
       const margin = 16;
 
       let posX = rect.left - docRect.left + scrollX;
