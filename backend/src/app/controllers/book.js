@@ -2,6 +2,7 @@ const fs = require("fs");
 const Book = require("../models/book");
 const path = require("path");
 const poppler = require("pdf-poppler");
+const Fuse = require("fuse.js");
 
 class BookController {
   async summaryBook(req, res) {
@@ -98,17 +99,24 @@ class BookController {
   }
 
   async updateProgress(req, res) {
-    const { book_id, last_read_page } = req.body;
+    const { book_id, last_read_page, reading_time } = req.body;
     try {
+      const curr_book = await Book.findById(book_id);
+
       await Book.findByIdAndUpdate(
         book_id,
-        { last_read_date: new Date(), last_read_page },
+        {
+          last_read_date: new Date(),
+          last_read_page,
+          total_reading_time:
+            Number(curr_book.total_reading_time) + Number(reading_time),
+        },
         { new: true }
       );
     } catch (error) {
       res.status(400).send(error.message);
     }
-    res.send("Update successfully");
+    res.send("Progress updated");
   }
 
   async getUploadedBook(req, res) {
@@ -120,6 +128,33 @@ class BookController {
       res.send(list_books);
     } catch (error) {
       res.status(500).send({ message: "Error fetching books", error });
+    }
+  }
+
+  async searchingBook(req, res) {
+    const { query } = req.body;
+
+    try {
+      const books = await Book.find();
+
+      const fuse = new Fuse(books, {
+        keys: ["name", "author"],
+        includeScore: true,
+        threshold: 0.6,
+        findAllMatches: true,
+        distance: 100,
+        minMatchCharLength: 2,
+      });
+
+      const results = fuse.search(query);
+
+      res.send(results.slice(0, 20).map((result) => result.item));
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: "Error in App/Controllers/BookController/searchingBook",
+        error,
+      });
     }
   }
 

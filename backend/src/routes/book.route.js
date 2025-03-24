@@ -11,5 +11,6 @@ route.post("/update-progress", BookController.updateProgress);
 route.get("/:book_id", BookController.getBook);
 route.get("/uploaded", BookController.getUploadedBook);
 route.post("/tts", generateSpeech);
+route.post("/search", BookController.searchingBook);
 
 module.exports = route;
