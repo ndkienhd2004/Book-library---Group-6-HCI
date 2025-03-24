@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button, ButtonGroup } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 /**
  * @typedef {Object} Book
  * @property {string} _id
@@ -16,15 +15,22 @@ import { useNavigate } from "react-router-dom";
  * @property {Date} last_read_date
  * @property {number}
  * @property {string} book_type
+
  */
 const PreviewCard = ({ book, open, handleClose }) => {
+  if (!book) return null;
   const navigate = useNavigate();
   const handleReadBook = () => {
     navigate(`/books/${book.filename}`);
   };
-  if (!book) return null;
+
   return (
-    <Modal open={open} onClose={handleClose} aria-labelledby="book-description">
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="book-title"
+      aria-describedby="book-description"
+    >
       <Box sx={styles.container}>
         {/* Phần trên (60%) */}
         <Box sx={styles.topSection}>
@@ -44,9 +50,6 @@ const PreviewCard = ({ book, open, handleClose }) => {
             <Typography variant="body2" sx={{ color: "black" }}>
               Format: {book.nums_page} pages, {book.book_type}
             </Typography>
-            <Typography variant="body2" sx={{ color: "black" }}>
-              Uploaded by {book.owner}
-            </Typography>
           </Box>
         </Box>
 
@@ -59,14 +62,18 @@ const PreviewCard = ({ book, open, handleClose }) => {
             >
               Description
             </Typography>
-            <Typography variant="body1">{book.summary}</Typography>
+            <Typography variant="body1" sx={{ color: "black" }}>
+              {book.summary?.trim()
+                ? book.summary
+                : "There is no description for this book"}
+            </Typography>
           </Box>
-          <Box>
+          <Box sx={styles.buttonContainer}>
             <Button
               variant="contained"
               color="primary"
               onClick={handleClose}
-              sx={{ mt: 3 }}
+              sx={{ mt: 3, ml: 2, backgroundColor: "#cba580" }}
             >
               Close
             </Button>
@@ -74,7 +81,7 @@ const PreviewCard = ({ book, open, handleClose }) => {
               variant="contained"
               color="primary"
               onClick={handleReadBook}
-              sx={{ mt: 3, ml: 2 }}
+              sx={{ mt: 3, ml: 2, backgroundColor: "#cba580" }}
             >
               Read
             </Button>

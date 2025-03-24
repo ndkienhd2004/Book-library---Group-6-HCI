@@ -50,6 +50,5 @@ const styles = {
     height: "40%",
     color: "black",
     width: "30vw",
-    backgroundColor: "#c8a17a",
   },
 };
