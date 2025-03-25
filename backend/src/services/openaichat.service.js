@@ -16,7 +16,7 @@ async function chatAI(content) {
 
   try {
     // Send the full conversation history
-    openai.chat.completions.create({
+    const AIrespone = openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: conversationHistory,
       stream: true,
@@ -25,7 +25,7 @@ async function chatAI(content) {
     let response = "";
 
     // Stream the response
-    for await (const chunk of openai) {
+    for await (const chunk of AIrespone) {
       const chunkContent = chunk.choices[0]?.delta?.content || "";
       response += chunkContent;
     }
@@ -45,7 +45,7 @@ function clearConversation() {
   conversationHistory.push({
     role: "developer",
     content:
-      "You are a helpful assistant. Keep track of previous responses to maintain context.",
+      "Bạn là một trợ lý hữu ích. Theo dõi các câu trả lời trước đó để tiếp diễn cuộc hội thoại.",
   });
 }
 
