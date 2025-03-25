@@ -3,28 +3,37 @@ const Book = require("../models/book");
 const path = require("path");
 const poppler = require("pdf-poppler");
 const Fuse = require("fuse.js");
+const Stream = require("stream");
+const openai = require("../../config/openai.config");
 
 class BookController {
   async summaryBook(req, res) {
-    const content =
-      "Hãy tóm tắt giúp tôi đoạn văn bản sau bằng Tiếng Việt. " +
-      "Đoạn tóm tắt trình bày theo gạch đầu dòng" +
-      "Nhiều nhất là 5 gạch đầu dòng" +
-      req.body.content;
-
-    let summary = "";
-    if (content.length > 5000) {
-      const pages = Math.ceil(content.length / 5000);
-      for (let i = 0; i < pages; i++) {
-        const result = await askAI(content.slice(i * 5000, (i + 1) * 5000));
-        summary += result.choices[0].message.content;
+    try {
+      const { content } = req.body;
+      if (!content) {
+        return res.status(400).json({ error: "Content is required" });
       }
-    } else {
-      const result = await askAI(content);
-      summary = result.choices[0].message.content;
-    }
+      console.log(content);
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "developer",
+            content:
+              "Bạn sẽ tóm tắt đoạn văn bản sau bằng Tiếng Việt. Đoạn tóm tắt trình bày theo gạch đầu dòng. Nhiều nhất là 5 gạch đầu dòng.",
+          },
+          { role: "user", content: content },
+        ],
+      });
 
-    res.send(summary);
+      const summary =
+        response.choices[0]?.message?.content || "Không có kết quả";
+
+      return res.json({ summary });
+    } catch (error) {
+      console.error("Error streaming response:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 
   async uploadBook(req, res) {
@@ -81,21 +90,31 @@ class BookController {
   }
 
   async explainText(req, res) {
-    const content =
-      "Hãy giải thích giúp tôi đoạn văn sau bằng tiếng Việt: " +
-      req.body.content;
-    let explain = "";
-    if (content.length > 5000) {
-      const pages = Math.ceil(content.length / 5000);
-      for (let i = 0; i < pages; i++) {
-        const result = await askAI(content.slice(i * 5000, (i + 1) * 5000));
-        explain += result.choices[0].message.content;
+    try {
+      const { content } = req.body;
+      if (!content) {
+        return res.status(400).json({ error: "Content is required" });
       }
-    } else {
-      const result = await askAI(content);
-      explain = result.choices[0].message.content;
+      console.log(content);
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "developer",
+            content: "giải thích ngắn gọn đoạn sau bằng tiếng việt.",
+          },
+          { role: "user", content: content },
+        ],
+      });
+
+      const summary =
+        response.choices[0]?.message?.content || "Không có kết quả";
+
+      return res.json({ summary });
+    } catch (error) {
+      console.error("Error streaming response:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
-    res.send(explain);
   }
 
   async updateProgress(req, res) {
