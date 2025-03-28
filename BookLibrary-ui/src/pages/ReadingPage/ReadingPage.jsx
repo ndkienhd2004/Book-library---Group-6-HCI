@@ -9,6 +9,8 @@ import ReadingTimer from "../../components/ReadingTimer/ReadingTimer";
 const ReadingPage = () => {
   const { bookid } = useParams();
   const [book, setBook] = useState(null);
+  const [summaryText, setSummaryText] = useState("");
+  const [explainText, setExplainText] = useState("");
 
   const mutation = useMutation({
     mutationFn: getBookById,
@@ -29,8 +31,15 @@ const ReadingPage = () => {
   return (
     <div style={styles.container}>
       <ReadingTimer />
-      <BookDetails book={book} />
-      <SupportReadingTools />
+      <BookDetails
+        book={book}
+        setExplainText={setExplainText}
+        setSummaryText={setSummaryText}
+      />
+      <SupportReadingTools
+        explainText={explainText}
+        summaryText={summaryText}
+      />
     </div>
   );
 };

@@ -1,14 +1,42 @@
 import { useEffect, useState } from "react";
-import { getAudio } from "../../apis/book";
+import { explainBook, getAudio, summaryBook } from "../../apis/book";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import styled from "styled-components";
-const ReadingMenu = ({ x, y, selectedText, onClose }) => {
+const ReadingMenu = ({
+  x,
+  y,
+  selectedText,
+  onClose,
+  setExplainText,
+  setSummaryText,
+}) => {
   if (!selectedText) return null;
 
   const [audioUrl, setAudioUrl] = useState(null);
   const [audio, setAudio] = useState(null);
+
+  const handleExplainButtonClicked = async () => {
+    try {
+      onClose();
+      const respond = await explainBook(selectedText);
+      console.log(respond);
+      setExplainText(respond);
+    } catch (error) {
+      console.log("Error fetching text", error);
+    }
+  };
+  const handleSummaryButtonClicked = async () => {
+    try {
+      onClose();
+      const respond = await summaryBook(selectedText);
+      console.log(respond);
+      setSummaryText(respond);
+    } catch (error) {
+      console.log("Error fetching text", error);
+    }
+  };
 
   const handleTextToSpeechButtonClicked = async () => {
     try {
@@ -28,16 +56,6 @@ const ReadingMenu = ({ x, y, selectedText, onClose }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (audioUrl) {
-  //     const newAudio = new Audio(audioUrl);
-  //     newAudio
-  //       .play()
-  //       .catch((error) => console.error("Playback failed:", error));
-  //     setAudio(newAudio);
-  //   }
-  // }, [audioUrl]);
-
   return (
     <div style={{ ...styles.container, left: `${x}px`, top: `${y}px` }}>
       <StyledWrapper onClick={handleTextToSpeechButtonClicked}>
@@ -47,13 +65,13 @@ const ReadingMenu = ({ x, y, selectedText, onClose }) => {
         Text to speech
       </StyledWrapper>
 
-      <StyledWrapper onClick={onClose}>
+      <StyledWrapper onClick={handleExplainButtonClicked}>
         <InfoOutlinedIcon
           style={{ color: "#fff", width: "16px", height: "16px" }}
         />
         Explain the text
       </StyledWrapper>
-      <StyledWrapper onClick={onClose}>
+      <StyledWrapper onClick={handleSummaryButtonClicked}>
         <SummarizeIcon
           style={{ color: "#fff", width: "16px", height: "16px" }}
         />

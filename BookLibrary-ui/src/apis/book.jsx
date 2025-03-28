@@ -36,7 +36,6 @@ export const uploadBook = async ({ file, title, author, numPages }) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(formData.headers);
     return respond.data;
   } catch (error) {
     throw error;
@@ -95,5 +94,34 @@ export const getAudio = async (text) => {
   } catch (err) {
     console.error("Error fetching audio:", err);
     throw err;
+  }
+};
+
+export const summaryBook = async (text) => {
+  try {
+    const respond = await http.post("/book/summary", { content: text });
+    return respond.data.summary;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const explainBook = async (text) => {
+  try {
+    const respond = await http.post("/book/explain", { content: text });
+    return respond.data.explain;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const searchBook = async (data) => {
+  try {
+    console.log(data);
+    const respond = await http.post("/book/search", { query: data });
+    console.log(respond);
+    return respond;
+  } catch (error) {
+    throw error;
   }
 };

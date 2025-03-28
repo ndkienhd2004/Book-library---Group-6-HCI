@@ -107,10 +107,10 @@ class BookController {
         ],
       });
 
-      const summary =
+      const explain =
         response.choices[0]?.message?.content || "Không có kết quả";
 
-      return res.json({ summary });
+      return res.json({ explain });
     } catch (error) {
       console.error("Error streaming response:", error);
       return res.status(500).json({ error: "Internal Server Error" });

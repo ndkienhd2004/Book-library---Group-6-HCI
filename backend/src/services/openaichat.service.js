@@ -16,7 +16,7 @@ async function chatAI(content) {
 
   try {
     // Send the full conversation history
-    const AIrespone = openai.chat.completions.create({
+    const AIrespone = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: conversationHistory,
       stream: true,

@@ -45,7 +45,7 @@ h3 {
 
 /* Tùy chỉnh thanh cuộn trên Chrome, Edge, Safari */
 *::-webkit-scrollbar {
-  width: 6px; /* Độ rộng nhỏ */
+  width: 1px; /* Độ rộng nhỏ */
 }
 
 *::-webkit-scrollbar-track {

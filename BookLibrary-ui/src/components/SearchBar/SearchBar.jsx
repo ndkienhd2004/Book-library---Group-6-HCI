@@ -1,9 +1,35 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
+import { searchBook } from "../../apis/book";
 
 const SearchBar = () => {
   const [searchText, setSearchText] = useState("");
+  const [searchList, setSearchList] = useState([]);
+
+  const handleChange = (e) => {
+    const searchValue = e.target.value;
+    if (!searchValue.startsWith(" ")) {
+      setSearchText(searchValue);
+    }
+  };
+
+  useEffect(() => {
+    if (!searchText.trim()) {
+      setSearchList([]);
+      return;
+    }
+
+    const delaySearch = setTimeout(async () => {
+      try {
+        const response = await searchBook(searchText);
+        setSearchList(response);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    }, 500);
+
+    return () => clearTimeout(delaySearch);
+  }, [searchText]);
 
   return (
     <StyledWrapper>
@@ -14,7 +40,7 @@ const SearchBar = () => {
           name="text"
           type="text"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={(e) => handleChange(e)}
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
