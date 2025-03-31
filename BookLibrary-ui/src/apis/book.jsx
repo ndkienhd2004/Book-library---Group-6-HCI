@@ -44,12 +44,19 @@ export const getBookById = async (bookId) => {
     const response = await http.get(`/book/${bookId}`, {
       responseType: "blob",
     });
-
+    const bookMetadata = {
+      _id: response.headers["X-Book-Id"],
+      title: response.headers["X-Book-Title"],
+      author: response.headers["X-Book-Author"],
+    };
     const fileURL = URL.createObjectURL(
       new Blob([response.data], { type: "application/pdf" })
     );
-
-    return fileURL;
+    console.log(bookMetadata);
+    return {
+      metadata: bookMetadata,
+      fileUrl: fileURL,
+    };
   } catch (error) {
     throw error;
   }

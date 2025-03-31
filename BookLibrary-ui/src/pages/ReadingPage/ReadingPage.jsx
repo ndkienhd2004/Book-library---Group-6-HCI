@@ -9,6 +9,7 @@ import ReadingTimer from "../../components/ReadingTimer/ReadingTimer";
 const ReadingPage = () => {
   const { bookid } = useParams();
   const [book, setBook] = useState(null);
+  const [bookMetadata, setBookMetadata] = useState(null);
   const [readingTime, setReadingTime] = useState(0);
   const [summaryText, setSummaryText] = useState("");
   const [explainText, setExplainText] = useState("");
@@ -18,19 +19,23 @@ const ReadingPage = () => {
   const mutation = useMutation({
     mutationFn: getBookById,
     onSuccess: (data) => {
-      setBook(data);
+      setBook(data.fileUrl);
+      setBookMetadata(data.metadata);
     },
     onError: (error) => {
       console.error("Lỗi khi lấy sách:", error);
     },
   });
 
-  // Hàm gửi dữ liệu progress
   const sendProgressUpdate = async () => {
-    if (book._id && readingTimeRef.current > 0 && numPagesRef.current > 0) {
+    if (
+      bookMetadata._id &&
+      readingTimeRef.current > 0 &&
+      numPagesRef.current > 0
+    ) {
       try {
         await updateProgress({
-          bookID: book._id,
+          bookID: metadata._id,
           readingTime: readingTimeRef.current,
           numPages: numPagesRef.current,
         });
@@ -41,7 +46,6 @@ const ReadingPage = () => {
     }
   };
 
-  // Hàm gửi bằng sendBeacon
   const sendProgressBeacon = () => {
     if (bookid && readingTimeRef.current > 0) {
       const data = new FormData();

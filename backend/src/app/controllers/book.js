@@ -180,13 +180,28 @@ class BookController {
   async getBook(req, res) {
     const { book_id } = req.params;
 
-    const filePath = path.join(__dirname, "../../public/book", `${book_id}`);
+    try {
+      const book = await Book.findOne({ filename: book_id });
 
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        res.status(404).send("File not found");
+      if (!book) {
+        return res.status(404).send("Book not found in database");
       }
-    });
+
+      const filePath = path.join(__dirname, "../../public/book", book_id);
+
+      res.setHeader("X-Book-Id", book._id.toString());
+      res.setHeader("X-Book-Title", book.title || "");
+      res.setHeader("X-Book-Author", book.author || "");
+      res.sendFile(filePath, (err) => {
+        if (err) {
+          console.error("Error sending file:", err);
+          res.status(404).send("File not found");
+        }
+      });
+    } catch (error) {
+      console.error("Error in getBook:", error);
+      res.status(500).send("Internal server error");
+    }
   }
 }
 
