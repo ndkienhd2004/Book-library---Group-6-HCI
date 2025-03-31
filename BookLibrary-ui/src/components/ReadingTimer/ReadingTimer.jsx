@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 
-const ReadingTimer = ({ time }) => {
-  const [timeSpent, setTimeSpent] = useState(0);
+const ReadingTimer = ({ setReadingTime, readingTime }) => {
   const [isActive, setIsActive] = useState(true);
   useEffect(() => {
     let intervalId;
 
     if (isActive) {
       intervalId = setInterval(() => {
-        setTimeSpent((prev) => prev + 1);
+        setReadingTime((prev) => prev + 1);
       }, 1000);
     }
 
@@ -36,7 +35,7 @@ const ReadingTimer = ({ time }) => {
   return (
     <div style={styles.container}>
       <h1>Time spent reading</h1>
-      <h2>{formatTime(timeSpent)}</h2>
+      <h2>{formatTime(readingTime)}</h2>
     </div>
   );
 };

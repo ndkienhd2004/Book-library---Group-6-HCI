@@ -4,8 +4,13 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import ReadingMenu from "../ReadingMenu/ReadingMenu";
 
-const BookDetails = ({ book, setExplainText, setSummaryText }) => {
-  const [numPages, setNumPages] = useState(null);
+const BookDetails = ({
+  book,
+  setExplainText,
+  setSummaryText,
+  setNumPages,
+  numPages,
+}) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [menu, setMenu] = useState(null);
   const [selectedText, setSelectedText] = useState("");

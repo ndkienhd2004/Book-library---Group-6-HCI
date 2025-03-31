@@ -21,7 +21,6 @@ const ReadingMenu = ({
     try {
       onClose();
       const respond = await explainBook(selectedText);
-      console.log(respond);
       setExplainText(respond);
     } catch (error) {
       console.log("Error fetching text", error);
@@ -31,7 +30,6 @@ const ReadingMenu = ({
     try {
       onClose();
       const respond = await summaryBook(selectedText);
-      console.log(respond);
       setSummaryText(respond);
     } catch (error) {
       console.log("Error fetching text", error);
@@ -43,7 +41,6 @@ const ReadingMenu = ({
       onClose();
       console.log("Selected text:", selectedText);
       const url = await getAudio(selectedText);
-      console.log("Audio URL:", url);
       setAudioUrl(url);
 
       const newAudio = new Audio(url);

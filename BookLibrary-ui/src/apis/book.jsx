@@ -19,10 +19,6 @@ export const getSummary = async (data) => {
   return http.post("/book/summary", { content: data });
 };
 
-export const updateProgress = async (data) => {
-  return http.post("/book/update-progress", data);
-};
-
 export const uploadBook = async ({ file, title, author, numPages }) => {
   const formData = new FormData();
   formData.append("book", file);
@@ -117,11 +113,25 @@ export const explainBook = async (text) => {
 
 export const searchBook = async (data) => {
   try {
-    console.log(data);
     const respond = await http.post("/book/search", { query: data });
-    console.log(respond);
     return respond;
   } catch (error) {
     throw error;
+  }
+};
+
+export const updateProgress = async ({ bookID, readingTime, numPages }) => {
+  console.log(bookID, readingTime, numPages);
+  const formData = new FormData();
+  formData.append("book_id", bookID);
+  formData.append("reading_time", readingTime);
+  formData.append("last_read_page", numPages);
+  try {
+    console.log(formData);
+    const respond = await http.post("/book/update-progress", formData);
+    console.log(respond);
+    return respond;
+  } catch (err) {
+    throw err;
   }
 };
