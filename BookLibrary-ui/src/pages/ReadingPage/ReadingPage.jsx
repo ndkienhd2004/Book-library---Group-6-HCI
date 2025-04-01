@@ -13,28 +13,18 @@ const ReadingPage = () => {
   const [readingTime, setReadingTime] = useState(0);
   const [summaryText, setSummaryText] = useState("");
   const [explainText, setExplainText] = useState("");
-  const [numPages, setNumPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
   const readingTimeRef = useRef(0);
-  const numPagesRef = useRef(0);
+  const pageNumberRef = useRef(0);
   const _id = useRef("");
-  const mutation = useMutation({
-    mutationFn: getBookById,
-    onSuccess: (data) => {
-      setBookMetadata(data.metadata);
-      setBook(data.fileUrl);
-      _id.current = data.metadata._id;
-    },
-    onError: (error) => {
-      console.error("Lỗi khi lấy sách:", error);
-    },
-  });
+
   const sendProgressUpdate = async () => {
-    if (_id && readingTimeRef.current > 0 && numPagesRef.current > 0) {
+    if (_id && readingTimeRef.current > 0 && pageNumberRef.current > 0) {
       try {
         await updateProgress({
           bookID: _id,
           readingTime: readingTimeRef.current,
-          numPages: numPagesRef.current,
+          pageNumber: pageNumberRef.current,
         });
         console.log("Progress updated successfully");
       } catch (err) {
@@ -48,7 +38,7 @@ const ReadingPage = () => {
       const data = new FormData();
       data.append("book_id", _id);
       data.append("reading_time", readingTimeRef.current);
-      data.append("last_read_page", numPagesRef.current);
+      data.append("last_read_page", pageNumberRef.current);
 
       navigator.sendBeacon(
         `${import.meta.env.VITE_API_URL}/book/update-progress`,
@@ -58,15 +48,26 @@ const ReadingPage = () => {
   };
 
   useEffect(() => {
-    if (bookid) {
-      mutation.mutate(bookid);
+    if (!bookid) {
+      return;
     }
+    const getBook = async () => {
+      try {
+        const data = await getBookById(bookid);
+        setBookMetadata(data.metadata);
+        setBook(data.fileUrl);
+        _id.current = data.metadata._id;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getBook();
   }, [bookid]);
 
   useEffect(() => {
     readingTimeRef.current = readingTime;
-    numPagesRef.current = numPages;
-  }, [readingTime, numPages]);
+    pageNumberRef.current = pageNumber;
+  }, [readingTime, pageNumber]);
 
   // Lưu tiến độ định kỳ mỗi 15 giây
   useEffect(() => {
@@ -74,6 +75,9 @@ const ReadingPage = () => {
     return () => clearInterval(interval);
   }, [bookid]);
 
+  useEffect(() => {
+    sendProgressUpdate();
+  }, [pageNumber]);
   // Xử lý khi người dùng rời trang
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -88,18 +92,22 @@ const ReadingPage = () => {
 
   return (
     <div style={styles.container}>
+      (book ?(
       <ReadingTimer setReadingTime={setReadingTime} readingTime={readingTime} />
       <BookDetails
         book={book}
         setExplainText={setExplainText}
         setSummaryText={setSummaryText}
-        setNumPages={setNumPages}
-        numPages={numPages}
+        setPageNumber={setPageNumber}
+        pageNumber={pageNumber}
       />
       <SupportReadingTools
         explainText={explainText}
         summaryText={summaryText}
       />
+      ):(
+      <p>Loading book details...</p>
+      ))
     </div>
   );
 };

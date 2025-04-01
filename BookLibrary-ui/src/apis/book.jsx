@@ -126,12 +126,12 @@ export const searchBook = async (data) => {
   }
 };
 
-export const updateProgress = async ({ bookID, readingTime, numPages }) => {
-  console.log(bookID.current, readingTime, numPages);
+export const updateProgress = async ({ bookID, readingTime, pageNumber }) => {
+  console.log(bookID.current, readingTime, pageNumber);
   const formData = new FormData();
   formData.append("book_id", bookID.current);
   formData.append("reading_time", readingTime);
-  formData.append("last_read_page", numPages);
+  formData.append("last_read_page", pageNumber);
   try {
     console.log(formData);
     const respond = await http.post("/book/update-progress", formData);

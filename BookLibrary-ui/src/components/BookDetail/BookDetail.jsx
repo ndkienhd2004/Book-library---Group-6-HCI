@@ -3,15 +3,18 @@ import { Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import ReadingMenu from "../ReadingMenu/ReadingMenu";
+import { pdfjs } from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
 const BookDetails = ({
   book,
   setExplainText,
   setSummaryText,
-  setNumPages,
-  numPages,
+  pageNumber,
+  setPageNumber,
 }) => {
-  const [pageNumber, setPageNumber] = useState(1);
+  const [numPages, setNumPages] = useState(1);
   const [menu, setMenu] = useState(null);
   const [selectedText, setSelectedText] = useState("");
 
