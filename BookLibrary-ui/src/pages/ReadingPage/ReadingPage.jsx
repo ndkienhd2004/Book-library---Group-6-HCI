@@ -16,26 +16,23 @@ const ReadingPage = () => {
   const [numPages, setNumPages] = useState(0);
   const readingTimeRef = useRef(0);
   const numPagesRef = useRef(0);
+  const _id = useRef("");
   const mutation = useMutation({
     mutationFn: getBookById,
     onSuccess: (data) => {
-      setBook(data.fileUrl);
       setBookMetadata(data.metadata);
+      setBook(data.fileUrl);
+      _id.current = data.metadata._id;
     },
     onError: (error) => {
       console.error("Lỗi khi lấy sách:", error);
     },
   });
-
   const sendProgressUpdate = async () => {
-    if (
-      bookMetadata._id &&
-      readingTimeRef.current > 0 &&
-      numPagesRef.current > 0
-    ) {
+    if (_id && readingTimeRef.current > 0 && numPagesRef.current > 0) {
       try {
         await updateProgress({
-          bookID: metadata._id,
+          bookID: _id,
           readingTime: readingTimeRef.current,
           numPages: numPagesRef.current,
         });
@@ -47,9 +44,9 @@ const ReadingPage = () => {
   };
 
   const sendProgressBeacon = () => {
-    if (bookid && readingTimeRef.current > 0) {
+    if (_id && readingTimeRef.current > 0) {
       const data = new FormData();
-      data.append("book_id", bookid);
+      data.append("book_id", _id);
       data.append("reading_time", readingTimeRef.current);
       data.append("last_read_page", numPagesRef.current);
 

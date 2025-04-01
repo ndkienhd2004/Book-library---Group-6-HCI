@@ -45,14 +45,13 @@ export const getBookById = async (bookId) => {
       responseType: "blob",
     });
     const bookMetadata = {
-      _id: response.headers["X-Book-Id"],
-      title: response.headers["X-Book-Title"],
-      author: response.headers["X-Book-Author"],
+      _id: response.headers.get("X-Book-Id"),
+      title: response.headers.get("X-Book-Title"),
+      author: response.headers.get("X-Book-Author"),
     };
     const fileURL = URL.createObjectURL(
       new Blob([response.data], { type: "application/pdf" })
     );
-    console.log(bookMetadata);
     return {
       metadata: bookMetadata,
       fileUrl: fileURL,
@@ -128,9 +127,9 @@ export const searchBook = async (data) => {
 };
 
 export const updateProgress = async ({ bookID, readingTime, numPages }) => {
-  console.log(bookID, readingTime, numPages);
+  console.log(bookID.current, readingTime, numPages);
   const formData = new FormData();
-  formData.append("book_id", bookID);
+  formData.append("book_id", bookID.current);
   formData.append("reading_time", readingTime);
   formData.append("last_read_page", numPages);
   try {
