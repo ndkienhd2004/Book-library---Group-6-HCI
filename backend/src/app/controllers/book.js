@@ -132,10 +132,10 @@ class BookController {
         },
         { new: true }
       );
+      res.send("Progress updated");
     } catch (error) {
       res.status(400).send(error.message);
     }
-    res.send("Progress updated");
   }
 
   async getUploadedBook(req, res) {
@@ -192,6 +192,7 @@ class BookController {
       res.setHeader("X-Book-Id", book._id.toString());
       res.setHeader("X-Book-Title", book.title || "");
       res.setHeader("X-Book-Author", book.author || "");
+
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error("Error sending file:", err);
