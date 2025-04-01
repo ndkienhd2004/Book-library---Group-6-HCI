@@ -19,7 +19,14 @@ const app = express();
 connectDB();
 
 // Enable CORS
-app.use(cors());
+const corsOptions = {
+  origin: "*", // Cho phép tất cả các nguồn truy cập
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type,Authorization",
+  exposedHeaders: "X-Book-Id, X-Book-Title, X-Book-Author",
+};
+
+app.use(cors(corsOptions));
 
 //Enable Cookie - JWT
 app.use(cookies());
