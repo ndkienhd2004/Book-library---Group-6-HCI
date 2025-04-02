@@ -1,4 +1,3 @@
-import { data } from "react-router-dom";
 import http from "../utils/http";
 
 export const getLibrary = async () => {
@@ -127,15 +126,12 @@ export const searchBook = async (data) => {
 };
 
 export const updateProgress = async ({ bookID, readingTime, pageNumber }) => {
-  console.log(bookID.current, readingTime, pageNumber);
   const formData = new FormData();
   formData.append("book_id", bookID.current);
   formData.append("reading_time", readingTime);
   formData.append("last_read_page", pageNumber);
   try {
-    console.log(formData);
     const respond = await http.post("/book/update-progress", formData);
-    console.log(respond);
     return respond;
   } catch (err) {
     throw err;

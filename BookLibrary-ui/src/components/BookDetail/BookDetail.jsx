@@ -5,7 +5,8 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import ReadingMenu from "../ReadingMenu/ReadingMenu";
 import { pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
+// Use official CDN with matching version
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const BookDetails = ({
   book,
@@ -14,13 +15,23 @@ const BookDetails = ({
   pageNumber,
   setPageNumber,
 }) => {
-  const [numPages, setNumPages] = useState(1);
+  const [numPages, setNumPages] = useState(null);
   const [menu, setMenu] = useState(null);
   const [selectedText, setSelectedText] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Validate and ensure pageNumber is always between 1 and numPages
+  const validatedPageNumber = Math.max(1, Math.min(pageNumber, numPages || 1));
 
   const onDocumentLoadSuccess = ({ numPages }) => {
+    if (!numPages) return;
     setNumPages(numPages);
-    setPageNumber(1);
+    setIsLoading(false);
+    
+    // Reset to first page if current page is invalid
+    if (pageNumber < 1 || pageNumber > numPages) {
+      setPageNumber(1);
+    }
   };
 
   const handleMouseUp = (event) => {
@@ -31,7 +42,7 @@ const BookDetails = ({
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
 
-      const documentContainer = document.getElementById("pdf-container"); // Khung PDF
+      const documentContainer = document.getElementById("pdf-container");
       if (!documentContainer) return;
 
       const docRect = documentContainer.getBoundingClientRect();
@@ -80,6 +91,14 @@ const BookDetails = ({
       document.removeEventListener("selectionchange", handleSelectionClear);
   }, []);
 
+  const handlePreviousPage = () => {
+    setPageNumber(prev => Math.max(1, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setPageNumber(prev => Math.min(numPages || 1, prev + 1));
+  };
+
   return (
     <div style={{ overflow: "visible", position: "relative" }}>
       <div
@@ -92,11 +111,26 @@ const BookDetails = ({
           zIndex: 1,
           overflowX: "hidden",
           overflowY: "auto",
+          minHeight: "500px" // Ensure container has minimum height
         }}
       >
-        <Document file={book} onLoadSuccess={onDocumentLoadSuccess}>
-          <Page pageNumber={pageNumber} />
-        </Document>
+        {book && (
+          <Document 
+            file={book} 
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={() => setIsLoading(false)}
+            loading={<div>Loading PDF...</div>}
+          >
+            {!isLoading && (
+              <Page 
+                pageNumber={validatedPageNumber} 
+              
+                loading={<div>Loading page...</div>}
+              />
+            )}
+          </Document>
+        )}
+
         {menu && (
           <ReadingMenu
             x={menu.x}
@@ -109,17 +143,17 @@ const BookDetails = ({
         )}
       </div>
       <p style={{ color: "black" }}>
-        Page {pageNumber} of {numPages || "?"}
+        Page {validatedPageNumber} of {numPages || "Loading..."}
       </p>
       <button
-        onClick={() => setPageNumber(pageNumber - 1)}
-        disabled={pageNumber <= 1}
+        onClick={handlePreviousPage}
+        disabled={validatedPageNumber <= 1}
       >
         Previous
       </button>
       <button
-        onClick={() => setPageNumber(pageNumber + 1)}
-        disabled={pageNumber >= numPages}
+        onClick={handleNextPage}
+        disabled={validatedPageNumber >= (numPages || 1)}
       >
         Next
       </button>
