@@ -11,6 +11,7 @@ const ReadingMenu = ({
   onClose,
   setExplainText,
   setSummaryText,
+  setLoading,
 }) => {
   if (!selectedText) return null;
 
@@ -20,19 +21,25 @@ const ReadingMenu = ({
   const handleExplainButtonClicked = async () => {
     try {
       onClose();
+      setLoading(true);
       const respond = await explainBook(selectedText);
       setExplainText(respond);
+      setLoading(false);
     } catch (error) {
       console.log("Error fetching text", error);
+      setLoading(false);
     }
   };
   const handleSummaryButtonClicked = async () => {
     try {
       onClose();
+      setLoading(true);
       const respond = await summaryBook(selectedText);
       setSummaryText(respond);
+      setLoading(false);
     } catch (error) {
       console.log("Error fetching text", error);
+      setLoading(false);
     }
   };
 

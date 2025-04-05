@@ -14,6 +14,7 @@ const BookDetails = ({
   setSummaryText,
   pageNumber,
   setPageNumber,
+  setLoading,
 }) => {
   const [numPages, setNumPages] = useState(null);
   const [menu, setMenu] = useState(null);
@@ -27,7 +28,7 @@ const BookDetails = ({
     if (!numPages) return;
     setNumPages(numPages);
     setIsLoading(false);
-    
+
     // Reset to first page if current page is invalid
     if (pageNumber < 1 || pageNumber > numPages) {
       setPageNumber(1);
@@ -92,11 +93,11 @@ const BookDetails = ({
   }, []);
 
   const handlePreviousPage = () => {
-    setPageNumber(prev => Math.max(1, prev - 1));
+    setPageNumber((prev) => Math.max(1, prev - 1));
   };
 
   const handleNextPage = () => {
-    setPageNumber(prev => Math.min(numPages || 1, prev + 1));
+    setPageNumber((prev) => Math.min(numPages || 1, prev + 1));
   };
 
   return (
@@ -111,20 +112,19 @@ const BookDetails = ({
           zIndex: 1,
           overflowX: "hidden",
           overflowY: "auto",
-          minHeight: "500px" // Ensure container has minimum height
+          minHeight: "500px", // Ensure container has minimum height
         }}
       >
         {book && (
-          <Document 
-            file={book} 
+          <Document
+            file={book}
             onLoadSuccess={onDocumentLoadSuccess}
             onLoadError={() => setIsLoading(false)}
             loading={<div>Loading PDF...</div>}
           >
             {!isLoading && (
-              <Page 
-                pageNumber={validatedPageNumber} 
-              
+              <Page
+                pageNumber={validatedPageNumber}
                 loading={<div>Loading page...</div>}
               />
             )}
@@ -138,6 +138,7 @@ const BookDetails = ({
             selectedText={selectedText}
             setExplainText={setExplainText}
             setSummaryText={setSummaryText}
+            setLoading={setLoading}
             onClose={() => setMenu(null)}
           />
         )}
@@ -145,10 +146,7 @@ const BookDetails = ({
       <p style={{ color: "black" }}>
         Page {validatedPageNumber} of {numPages || "Loading..."}
       </p>
-      <button
-        onClick={handlePreviousPage}
-        disabled={validatedPageNumber <= 1}
-      >
+      <button onClick={handlePreviousPage} disabled={validatedPageNumber <= 1}>
         Previous
       </button>
       <button

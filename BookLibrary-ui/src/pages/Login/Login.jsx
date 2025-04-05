@@ -100,7 +100,7 @@ const Login = () => {
             />
           </div>
           {loading ? (
-            <Loading />
+            <Loading size={32} />
           ) : (
             <Button
               placeholder={"LOGIN"}

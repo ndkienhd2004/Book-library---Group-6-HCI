@@ -5,6 +5,8 @@ import { getBookById, updateProgress } from "../../apis/book";
 import { useEffect, useRef, useState } from "react";
 import SupportReadingTools from "../../components/SupportReadingTools/SupportReadingTools";
 import ReadingTimer from "../../components/ReadingTimer/ReadingTimer";
+import { Alert, Snackbar, Stack } from "@mui/material";
+import Loading from "../../components/Loading/Loading";
 
 const ReadingPage = () => {
   const { bookid } = useParams();
@@ -13,6 +15,7 @@ const ReadingPage = () => {
   const [readingTime, setReadingTime] = useState(0);
   const [summaryText, setSummaryText] = useState("");
   const [explainText, setExplainText] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const readingTimeRef = useRef(0);
   const pageNumberRef = useRef(0);
@@ -91,24 +94,71 @@ const ReadingPage = () => {
   }, [bookid]);
 
   return (
-    <div style={styles.container}>
-      (book ?(
-      <ReadingTimer setReadingTime={setReadingTime} readingTime={readingTime} />
-      <BookDetails
-        book={book}
-        setExplainText={setExplainText}
-        setSummaryText={setSummaryText}
-        setPageNumber={setPageNumber}
-        pageNumber={pageNumber}
-      />
-      <SupportReadingTools
-        explainText={explainText}
-        summaryText={summaryText}
-      />
-      ):(
-      <p>Loading book details...</p>
-      ))
-    </div>
+    <>
+      <div style={styles.container}>
+        (book ?(
+        <ReadingTimer
+          setReadingTime={setReadingTime}
+          readingTime={readingTime}
+        />
+        <BookDetails
+          book={book}
+          setExplainText={setExplainText}
+          setSummaryText={setSummaryText}
+          setPageNumber={setPageNumber}
+          pageNumber={pageNumber}
+          setLoading={setLoading}
+        />
+        <SupportReadingTools
+          explainText={explainText}
+          summaryText={summaryText}
+        />
+        ):(
+        <p>Loading book details...</p>
+        ))
+      </div>
+      <Snackbar
+        open={!!isLoading}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        sx={{
+          left: "2vw",
+          bottom: "2vh",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center", // Căn giữa theo chiều dọc
+        }}
+      >
+        <Alert
+          severity="info"
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            color: "#fff",
+            minHeight: "32px",
+            minWidth: "80px",
+            textAlign: "center",
+            padding: "8px 16px",
+          }}
+          icon={false}
+        >
+          <Loading size={16} />
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              marginLeft: "1vw",
+              color: "black",
+              fontSize: 16,
+            }}
+          >
+            Loading ...
+          </span>
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 
