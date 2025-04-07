@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom";
+import ContactButtons from "./contactButton";
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer style={styles.footer}>
       <div style={styles.container}>
         {/* Left Section - Brand & Description */}
         <div style={styles.brand}>
-          <h2 style={styles.logo}>BookWormHub</h2>
+          <h2 style={styles.logo}>BookLibrary</h2>
           <p style={styles.description}>
             A platform designed for readers to discover, organize, and enjoy
             books, while also enabling authors to publish, showcase, and track
@@ -15,17 +18,14 @@ const Footer = () => {
         {/* Links Section */}
         <div style={styles.linksContainer}>
           <div style={styles.linksColumn}>
-            <h4>About & Information</h4>
-            <ul>
-              <li>About Us</li>
-              <li>How It Works</li>
-              <li>Blog</li>
-              <li>Careers</li>
+            <h4 style={styles.linksTitle}>About & Information</h4>
+            <ul style={styles.ul}>
+              <li onClick={() => navigate("/about-us")}>About Us</li>
             </ul>
           </div>
           <div style={styles.linksColumn}>
-            <h4>User Resources</h4>
-            <ul>
+            <h4 style={styles.linksTitle}>User Resources</h4>
+            <ul style={styles.ul}>
               <li>Help Center</li>
               <li>Contact Us</li>
               <li>Community Guidelines</li>
@@ -33,37 +33,25 @@ const Footer = () => {
             </ul>
           </div>
           <div style={styles.linksColumn}>
-            <h4>For Readers</h4>
-            <ul>
+            <h4 style={styles.linksTitle}>For Readers</h4>
+            <ul style={styles.ul}>
               <li>Browse Books</li>
-              <li>Library</li>
-              <li>Recommendations</li>
+              <li onClick={() => navigate("/library")}>Library</li>
+              <li onClick={() => navigate("/uploading")}>Upload Books</li>
             </ul>
           </div>
-          <div style={styles.linksColumn}>
-            <h4>For Authors</h4>
-            <ul>
-              <li>Publish Your Work</li>
-              <li>Author Dashboard</li>
-              <li>Pricing & Plans</li>
-            </ul>
-          </div>
-        </div>
 
-        {/* Social Media Section */}
-        <div style={styles.socialMedia}>
-          <h4>Follow Us On</h4>
-          <div style={styles.icons}>
-            <span>🔵</span> {/* Replace with actual icons */}
-            <span>⚫</span>
-            <span>⚪</span>
-            <span>🔴</span>
+          {/* Social Media Section */}
+          <div style={styles.linksColumn}>
+            <h4 style={styles.linksTitle}>Follow Us On</h4>
+            <div style={styles.icons}>
+              <ContactButtons />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Copyright Text */}
-      <div style={styles.copyright}>&copy; 2024 BookWormHub</div>
+      <div style={styles.copyright}>&copy; 2025 BookLibrary</div>
     </footer>
   );
 };
@@ -79,37 +67,52 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    maxWidth: "1200px",
+    maxWidth: "80vw",
     margin: "auto",
+    alignItems: "flex-start",
   },
   brand: {
+    display: "flex",
+    flexDirection: "column",
     flex: "1",
     minWidth: "250px",
+    alignItems: "flex-start",
   },
   logo: {
     fontSize: "22px",
     fontWeight: "bold",
+    marginBottom: "10px",
   },
   description: {
     maxWidth: "300px",
+    marginLeft: "0px",
+    textAlign: "left",
   },
   linksContainer: {
     display: "flex",
-    justifyContent: "space-between",
     flex: "2",
     minWidth: "500px",
+    justifyContent: "space-between",
   },
   linksColumn: {
-    minWidth: "120px",
+    display: "flex",
+    flexDirection: "column",
+    minWidth: "150px",
   },
-  socialMedia: {
-    textAlign: "center",
-    marginTop: "20px",
+  linksTitle: {
+    marginBottom: "10px",
   },
+  ul: {
+    listStyleType: "disc",
+    paddingLeft: "20px",
+    margin: 0,
+  },
+
   icons: {
     display: "flex",
     justifyContent: "center",
     gap: "10px",
+    marginTop: "10px",
   },
   copyright: {
     textAlign: "center",

@@ -96,26 +96,38 @@ const ReadingPage = () => {
   return (
     <>
       <div style={styles.container}>
-        (book ?(
-        <ReadingTimer
-          setReadingTime={setReadingTime}
-          readingTime={readingTime}
-        />
-        <BookDetails
-          book={book}
-          setExplainText={setExplainText}
-          setSummaryText={setSummaryText}
-          setPageNumber={setPageNumber}
-          pageNumber={pageNumber}
-          setLoading={setLoading}
-        />
-        <SupportReadingTools
-          explainText={explainText}
-          summaryText={summaryText}
-        />
-        ):(
-        <p>Loading book details...</p>
-        ))
+        <div style={styles.container}>
+          {book ? (
+            <>
+              <div style={styles.sidePanel}>
+                <ReadingTimer
+                  setReadingTime={setReadingTime}
+                  readingTime={readingTime}
+                />
+              </div>
+
+              <div>
+                <BookDetails
+                  book={book}
+                  setExplainText={setExplainText}
+                  setSummaryText={setSummaryText}
+                  setPageNumber={setPageNumber}
+                  pageNumber={pageNumber}
+                  setLoading={setLoading}
+                />
+              </div>
+
+              <div>
+                <SupportReadingTools
+                  explainText={explainText}
+                  summaryText={summaryText}
+                />
+              </div>
+            </>
+          ) : (
+            <p>Loading book details...</p>
+          )}
+        </div>
       </div>
       <Snackbar
         open={!!isLoading}
@@ -168,9 +180,18 @@ const styles = {
   container: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "stretch",
+    gap: "3rem",
+    padding: "2vh 5vw",
+    backgroundColor: "#f8f8f8",
+  },
+  sidePanel: {
+    flex: "1",
+    display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    gap: "3%",
-    width: "100%",
+    height: "100%",
   },
 };
