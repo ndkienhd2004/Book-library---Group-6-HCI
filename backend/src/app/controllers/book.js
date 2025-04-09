@@ -5,6 +5,7 @@ const poppler = require("pdf-poppler");
 const Fuse = require("fuse.js");
 const Stream = require("stream");
 const openai = require("../../config/openai.config");
+const pdf = require("pdf-parse");
 
 class BookController {
   async summaryBook(req, res) {
@@ -53,6 +54,10 @@ class BookController {
       fs.mkdirSync(imgDir, { recursive: true });
     }
 
+    const dataBuffer = fs.readFileSync(pdfPath);
+    const pdfData = await pdf(dataBuffer);
+    const nums_page = pdfData.numpages;
+
     await poppler.convert(pdfPath, {
       format: "png",
       out_dir: imgDir,
@@ -81,12 +86,12 @@ class BookController {
       title: req.body.title,
       author: req.body.author,
       summary: "",
-      nums_page: req.body.nums_page,
+      nums_page: nums_page,
       uploaded_date: uploaded_date,
       cover_image: imgFileName,
     });
 
-    res.send({ data: new_book.filename });
+    res.send({ data: new_book });
   }
 
   async explainText(req, res) {
@@ -190,6 +195,7 @@ class BookController {
       const filePath = path.join(__dirname, "../../public/book", book_id);
 
       res.setHeader("X-Book-Id", book._id.toString());
+      ole.log(res.getHeaders());
       res.setHeader(
         "X-Book-Title",
         book.title.replace(/[\r\n]/g, "").trim() || ""
@@ -198,7 +204,6 @@ class BookController {
         "X-Book-Author",
         book.author.replace(/[\r\n]/g, "").trim() || ""
       );
-
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error("Error sending file:", err);
