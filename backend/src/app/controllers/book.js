@@ -132,10 +132,10 @@ class BookController {
         },
         { new: true }
       );
+      res.send("Progress updated");
     } catch (error) {
       res.status(400).send(error.message);
     }
-    res.send("Progress updated");
   }
 
   async getUploadedBook(req, res) {
@@ -190,9 +190,15 @@ class BookController {
       const filePath = path.join(__dirname, "../../public/book", book_id);
 
       res.setHeader("X-Book-Id", book._id.toString());
-      res.setHeader("X-Book-Title", book.title || "");
-      res.setHeader("X-Book-Author", book.author || "");
-      console.log(res.getHeaders());
+      ole.log(res.getHeaders());
+      res.setHeader(
+        "X-Book-Title",
+        book.title.replace(/[\r\n]/g, "").trim() || ""
+      );
+      res.setHeader(
+        "X-Book-Author",
+        book.author.replace(/[\r\n]/g, "").trim() || ""
+      );
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error("Error sending file:", err);

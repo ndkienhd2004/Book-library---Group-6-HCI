@@ -1,4 +1,3 @@
-import { data } from "react-router-dom";
 import http from "../utils/http";
 
 export const getLibrary = async () => {
@@ -52,7 +51,6 @@ export const getBookById = async (bookId) => {
     const fileURL = URL.createObjectURL(
       new Blob([response.data], { type: "application/pdf" })
     );
-    console.log(bookMetadata);
     return {
       metadata: bookMetadata,
       fileUrl: fileURL,
@@ -127,16 +125,13 @@ export const searchBook = async (data) => {
   }
 };
 
-export const updateProgress = async ({ bookID, readingTime, numPages }) => {
-  console.log(bookID, readingTime, numPages);
+export const updateProgress = async ({ bookID, readingTime, pageNumber }) => {
   const formData = new FormData();
-  formData.append("book_id", bookID);
+  formData.append("book_id", bookID.current);
   formData.append("reading_time", readingTime);
-  formData.append("last_read_page", numPages);
+  formData.append("last_read_page", pageNumber);
   try {
-    console.log(formData);
     const respond = await http.post("/book/update-progress", formData);
-    console.log(respond);
     return respond;
   } catch (err) {
     throw err;

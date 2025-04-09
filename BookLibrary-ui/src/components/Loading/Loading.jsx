@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const Loading = () => {
+const Loading = ({ size = 24 }) => {
+  // 🔥 Cho phép điều chỉnh kích thước mặc định là 24px
   return (
-    <StyledWrapper>
+    <StyledWrapper size={size}>
       <div className="ui-Loading Loading-blk">
         <svg viewBox="22 22 44 44" className="multiColor-Loading">
           <circle
@@ -21,13 +22,13 @@ const Loading = () => {
 };
 
 const StyledWrapper = styled.div`
-  /* //codelessly Loading style */
+  display: inline-flex;
+  align-items: center;
   .ui-Loading {
     display: inline-block;
-    width: 50px;
-    height: 50px;
+    width: ${(props) => props.size}px;
+    height: ${(props) => props.size}px;
   }
-
   .Loading-blk {
     color: #3f51b5;
     animation: rotate-outer08 1.4s linear infinite;
@@ -42,10 +43,6 @@ const StyledWrapper = styled.div`
     stroke: currentColor;
   }
 
-  .MuiCircularProgress-circleStatic {
-    transition: stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  }
-
   .Loading-circle-animation {
     animation: rotate-inner08 1.4s ease-in-out infinite;
     stroke-dasharray: 80px, 200px;
@@ -53,10 +50,6 @@ const StyledWrapper = styled.div`
   }
 
   @keyframes rotate-outer08 {
-    0% {
-      transform-origin: 50% 50%;
-    }
-
     100% {
       transform: rotate(360deg);
     }
@@ -67,12 +60,10 @@ const StyledWrapper = styled.div`
       stroke-dasharray: 1px, 200px;
       stroke-dashoffset: 0;
     }
-
     50% {
       stroke-dasharray: 100px, 200px;
       stroke-dashoffset: -15px;
     }
-
     100% {
       stroke-dasharray: 100px, 200px;
       stroke-dashoffset: -125px;
@@ -83,15 +74,12 @@ const StyledWrapper = styled.div`
     0% {
       color: #4285f4;
     }
-
     25% {
       color: #ea4335;
     }
-
     50% {
       color: #f9bb2d;
     }
-
     75% {
       color: #34a853;
     }
