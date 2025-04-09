@@ -19,7 +19,39 @@ const ReadingPage = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const readingTimeRef = useRef(0);
   const pageNumberRef = useRef(0);
+  const [darkMode, setDarkMode] = useState(false);
   const _id = useRef("");
+
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "stretch",
+      gap: "3rem",
+      padding: "2vh 5vw",
+      backgroundColor: darkMode ? "#1a1a1a" : "#f8f8f8",
+      color: darkMode ? "#ffffff" : "#000000",
+      minHeight: "100vh",
+    },
+    sidePanel: {
+      flex: "1",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100%",
+      gap: "1rem",
+    },
+    toggleButton: {
+      padding: "0.5rem 1rem",
+      borderRadius: "4px",
+      border: "none",
+      backgroundColor: darkMode ? "#424242" : "#e0e0e0",
+      color: darkMode ? "white" : "black",
+      cursor: "pointer",
+    },
+  };
 
   const sendProgressUpdate = async () => {
     if (_id && readingTimeRef.current > 0 && pageNumberRef.current > 0) {
@@ -103,7 +135,14 @@ const ReadingPage = () => {
                 <ReadingTimer
                   setReadingTime={setReadingTime}
                   readingTime={readingTime}
+                  darkMode={darkMode}
                 />
+                <button
+                  style={styles.toggleButton}
+                  onClick={() => setDarkMode(!darkMode)}
+                >
+                  {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                </button>
               </div>
 
               <div>
@@ -114,6 +153,7 @@ const ReadingPage = () => {
                   setPageNumber={setPageNumber}
                   pageNumber={pageNumber}
                   setLoading={setLoading}
+                  darkMode={darkMode}
                 />
               </div>
 
@@ -121,6 +161,7 @@ const ReadingPage = () => {
                 <SupportReadingTools
                   explainText={explainText}
                   summaryText={summaryText}
+                  darkMode={darkMode}
                 />
               </div>
             </>
@@ -137,7 +178,7 @@ const ReadingPage = () => {
           bottom: "2vh",
           display: "flex",
           flexDirection: "row",
-          alignItems: "center", // Căn giữa theo chiều dọc
+          alignItems: "center",
         }}
       >
         <Alert
@@ -148,7 +189,8 @@ const ReadingPage = () => {
             alignItems: "center",
             justifyContent: "center",
             gap: "8px",
-            color: "#fff",
+            color: darkMode ? "#fff" : "#000",
+            backgroundColor: darkMode ? "#424242" : "#e3f2fd",
             minHeight: "32px",
             minWidth: "80px",
             textAlign: "center",
@@ -162,7 +204,7 @@ const ReadingPage = () => {
               display: "inline-flex",
               alignItems: "center",
               marginLeft: "1vw",
-              color: "black",
+              color: darkMode ? "white" : "black",
               fontSize: 16,
             }}
           >
@@ -175,23 +217,3 @@ const ReadingPage = () => {
 };
 
 export default ReadingPage;
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "stretch",
-    gap: "3rem",
-    padding: "2vh 5vw",
-    backgroundColor: "#f8f8f8",
-  },
-  sidePanel: {
-    flex: "1",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-  },
-};

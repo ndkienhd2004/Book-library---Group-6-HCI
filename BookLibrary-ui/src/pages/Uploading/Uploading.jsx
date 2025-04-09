@@ -5,7 +5,7 @@ import { uploadBook } from "../../apis/book";
 import { useMutation } from "@tanstack/react-query";
 import Loading from "../../components/Loading/Loading";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Uploading = () => {
   const [uploadedfile, setUploadedfile] = useState("");

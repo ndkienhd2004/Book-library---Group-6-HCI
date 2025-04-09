@@ -15,6 +15,7 @@ const BookDetails = ({
   pageNumber,
   setPageNumber,
   setLoading,
+  darkMode,
 }) => {
   const [numPages, setNumPages] = useState(null);
   const [menu, setMenu] = useState(null);
@@ -113,6 +114,10 @@ const BookDetails = ({
           overflowX: "hidden",
           overflowY: "auto",
           minHeight: "500px", // Ensure container has minimum height
+          filter: darkMode
+            ? "invert(0.9) hue-rotate(180deg) brightness(0.9)"
+            : "none",
+          //backgroundColor: darkMode ? "#1e1e1e" : "#fff",
         }}
       >
         {book && (
@@ -143,10 +148,16 @@ const BookDetails = ({
           />
         )}
       </div>
-      <p style={{ color: "black" }}>
+      <p style={{ color: darkMode ? "#fff" : "#000" }}>
         Page {validatedPageNumber} of {numPages || "Loading..."}
       </p>
-      <button onClick={handlePreviousPage} disabled={validatedPageNumber <= 1}>
+      <button
+        onClick={handlePreviousPage}
+        disabled={validatedPageNumber <= 1}
+        style={{
+          marginRight: "10px",
+        }}
+      >
         Previous
       </button>
       <button
