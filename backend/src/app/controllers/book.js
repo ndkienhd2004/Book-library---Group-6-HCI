@@ -192,6 +192,7 @@ class BookController {
       res.setHeader("X-Book-Id", book._id.toString());
       res.setHeader("X-Book-Title", book.title || "");
       res.setHeader("X-Book-Author", book.author || "");
+      console.log(res.getHeaders());
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error("Error sending file:", err);

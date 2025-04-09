@@ -45,9 +45,9 @@ export const getBookById = async (bookId) => {
       responseType: "blob",
     });
     const bookMetadata = {
-      _id: response.headers["X-Book-Id"],
-      title: response.headers["X-Book-Title"],
-      author: response.headers["X-Book-Author"],
+      _id: response.headers.get("X-Book-Id"),
+      title: response.headers.get("X-Book-Title"),
+      author: response.headers.get("X-Book-Author"),
     };
     const fileURL = URL.createObjectURL(
       new Blob([response.data], { type: "application/pdf" })
