@@ -32,7 +32,6 @@ const ReadingPage = () => {
       padding: "2vh 5vw",
       backgroundColor: darkMode ? "#1a1a1a" : "#f8f8f8",
       color: darkMode ? "#ffffff" : "#000000",
-      minHeight: "100vh",
     },
     sidePanel: {
       flex: "1",
@@ -41,7 +40,6 @@ const ReadingPage = () => {
       alignItems: "center",
       justifyContent: "center",
       height: "100%",
-      gap: "1rem",
     },
     toggleButton: {
       padding: "0.5rem 1rem",

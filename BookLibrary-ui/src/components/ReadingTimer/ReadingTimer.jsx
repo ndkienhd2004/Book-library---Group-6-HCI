@@ -13,8 +13,6 @@ const ReadingTimer = ({ setReadingTime, readingTime, darkMode }) => {
       height: "40%",
       color: darkMode ? "#ffffff" : "#000000",
       width: "30vw",
-      borderRadius: "8px",
-      padding: "1rem",
     },
     text: {
       margin: "0.5rem 0",

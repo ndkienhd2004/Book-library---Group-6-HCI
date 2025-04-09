@@ -1,21 +1,11 @@
-import {
-  borderTop,
-  height,
-  margin,
-  maxWidth,
-  padding,
-  width,
-} from "@mui/system";
 import React, { useRef, useState, useEffect } from "react";
-import Draggable from "react-draggable";
 import { FaComments } from "react-icons/fa";
 import styled from "styled-components";
 import InputField from "../InputField/InputField";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import zIndex from "@mui/material/styles/zIndex";
 import { io } from "socket.io-client";
-
+import CloseIcon from "@mui/icons-material/Close";
 const useSocket = (() => {
   let socketInstance = null;
   return () => {
@@ -80,8 +70,18 @@ const ChatBox = () => {
       {isOpen && (
         <div style={styles.chatBox}>
           <div style={styles.chatHeader}>
-            <span>Chat with Support</span>
-            <button onClick={() => setIsOpen(false)}>✖</button>
+            <span style={{ marginLeft: "2vw" }}>Chat with Support</span>
+            <button
+              onClick={() => setIsOpen(false)}
+              style={{
+                marginRight: "1vw",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </button>
           </div>
           <div style={styles.chatMessages}>
             {messages.map((msg, index) => (
@@ -144,6 +144,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "flex-end",
     cursor: "grab",
+    borderRadius: "10px",
     zIndex: 9999,
   },
   chatBox: {
@@ -161,8 +162,10 @@ const styles = {
     fontWeight: "bold",
     backgroundColor: "#c8a17a",
     width: "100%",
-    height: "30px",
+    height: "40px",
     alignItems: "center",
+    borderTopLeftRadius: "10px",
+    borderTopRightRadius: "10px",
   },
   chatMessages: {
     flex: 1,
