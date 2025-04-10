@@ -4,7 +4,7 @@ import { pdfjs, Document } from "react-pdf";
 import { uploadBook } from "../../apis/book";
 import { useMutation } from "@tanstack/react-query";
 import Loading from "../../components/Loading/Loading";
-
+import { Alert, Snackbar } from "@mui/material";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Uploading = () => {
@@ -13,7 +13,8 @@ const Uploading = () => {
   const [author, setAuthor] = useState("");
   const [numPages, setNumPages] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const handleUploadFile = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -40,11 +41,14 @@ const Uploading = () => {
         setAuthor("");
         setNumPages(0);
         setLoading(false);
-        alert("Upload book successfully!");
+        setSuccessMessage("Upload book successfully!");
       }, 1000);
     },
     onError: (error) => {
-      console.error("Lỗi khi tải sách:", error);
+      setErrorMessage("Err while uploading book:" + error.message);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     },
   });
 
@@ -136,6 +140,22 @@ const Uploading = () => {
           </span>
         </div>
       )}
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={3000}
+        onClose={() => setErrorMessage("")}
+      >
+        <Alert severity="error">{errorMessage}</Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSuccessMessage("");
+        }}
+      >
+        <Alert severity="success">{successMessage}</Alert>
+      </Snackbar>
     </div>
   );
 };

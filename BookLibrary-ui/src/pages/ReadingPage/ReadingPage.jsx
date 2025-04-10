@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
 import BookDetails from "../../components/BookDetail/BookDetail";
-import { useMutation } from "@tanstack/react-query";
 import { getBookById, updateProgress } from "../../apis/book";
 import { useEffect, useRef, useState } from "react";
 import SupportReadingTools from "../../components/SupportReadingTools/SupportReadingTools";
 import ReadingTimer from "../../components/ReadingTimer/ReadingTimer";
-import { Alert, Snackbar, Stack } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import Loading from "../../components/Loading/Loading";
 
 const ReadingPage = () => {
@@ -32,6 +31,9 @@ const ReadingPage = () => {
       padding: "2vh 5vw",
       backgroundColor: darkMode ? "#1a1a1a" : "#f8f8f8",
       color: darkMode ? "#ffffff" : "#000000",
+      height: "100vh",
+      overflow: "hidden",
+      fontFamily: "Arial, sans-serif",
     },
     sidePanel: {
       flex: "1",
@@ -39,6 +41,7 @@ const ReadingPage = () => {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
+      alignContent: "center",
       height: "100%",
     },
     toggleButton: {
@@ -89,6 +92,8 @@ const ReadingPage = () => {
         const data = await getBookById(bookid);
         setBookMetadata(data.metadata);
         setBook(data.fileUrl);
+        setReadingTime(Number(data.metadata.time_reading));
+        setPageNumber(Number(data.metadata.last_read_page));
         _id.current = data.metadata._id;
       } catch (err) {
         console.log(err);
@@ -143,7 +148,14 @@ const ReadingPage = () => {
                 </button>
               </div>
 
-              <div>
+              <div
+                style={{
+                  flex: "3",
+                  position: "relative",
+                  alignContent: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <BookDetails
                   book={book}
                   setExplainText={setExplainText}

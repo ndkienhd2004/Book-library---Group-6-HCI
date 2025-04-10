@@ -47,7 +47,10 @@ export const getBookById = async (bookId) => {
       _id: response.headers.get("X-Book-Id"),
       title: response.headers.get("X-Book-Title"),
       author: response.headers.get("X-Book-Author"),
+      time_reading: response.headers.get("X-Book-Reading-Time"),
+      last_read_page: response.headers["x-book-last_read_page"], // sửa ở đây
     };
+    console.log("Book Metadata:", bookMetadata);
     const fileURL = URL.createObjectURL(
       new Blob([response.data], { type: "application/pdf" })
     );

@@ -132,8 +132,7 @@ class BookController {
         {
           last_read_date: new Date(),
           last_read_page,
-          total_reading_time:
-            Number(curr_book.total_reading_time) + Number(reading_time),
+          total_reading_time: Number(reading_time),
         },
         { new: true }
       );
@@ -195,7 +194,7 @@ class BookController {
       const filePath = path.join(__dirname, "../../public/book", book_id);
 
       res.setHeader("X-Book-Id", book._id.toString());
-      ole.log(res.getHeaders());
+      console.log(res.getHeaders());
       res.setHeader(
         "X-Book-Title",
         book.title.replace(/[\r\n]/g, "").trim() || ""
@@ -204,6 +203,21 @@ class BookController {
         "X-Book-Author",
         book.author.replace(/[\r\n]/g, "").trim() || ""
       );
+      res.setHeader(
+        "X-Book-Reading-Time",
+        book.total_reading_time ? book.total_reading_time : 0
+      );
+      res.setHeader(
+        "X-Book-last_read_page",
+        typeof book.last_read_page === "number"
+          ? book.last_read_page.toString()
+          : ""
+      );
+      res.setHeader(
+        "Access-Control-Expose-Headers",
+        "X-Book-Id, X-Book-Title, X-Book-Author, X-Book-Reading-Time, X-Book-last_read_page"
+      );
+      console.log(book.total_reading_time);
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error("Error sending file:", err);

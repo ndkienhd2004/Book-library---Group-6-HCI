@@ -113,7 +113,7 @@ const BookDetails = ({
           zIndex: 1,
           overflowX: "hidden",
           overflowY: "auto",
-          minHeight: "500px", // Ensure container has minimum height
+          minHeight: "500px",
           filter: darkMode
             ? "invert(0.9) hue-rotate(180deg) brightness(0.9)"
             : "none",
@@ -131,6 +131,9 @@ const BookDetails = ({
               <Page
                 pageNumber={validatedPageNumber}
                 loading={<div>Loading page...</div>}
+                height={window.innerHeight - 300}
+                renderTextLayer={true}
+                renderAnnotationLayer={true}
               />
             )}
           </Document>

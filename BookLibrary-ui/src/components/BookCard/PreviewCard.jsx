@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button, ButtonGroup } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
+
 /**
  * @typedef {Object} Book
  * @property {string} _id
@@ -50,6 +52,32 @@ const PreviewCard = ({ book, open, handleClose }) => {
             <Typography variant="body2" sx={{ color: "black" }}>
               Format: {book.nums_page} pages, {book.book_type}
             </Typography>
+            {book.last_read_page > 0 && (
+              <>
+                <Typography variant="body2" sx={{ color: "black" }}>
+                  Last read page: {book.last_read_page}
+                  <br />
+                  Last read date:{" "}
+                  {new Date(book.last_read_date).toLocaleDateString()}
+                  <br />
+                  Total reading time:{" "}
+                  {parseFloat((book.total_reading_time / 60).toFixed(1))}{" "}
+                  minutes
+                </Typography>
+
+                <Box sx={{ width: "90%", mt: 1 }}>
+                  <Typography variant="body2" sx={{ color: "black", mb: 0.5 }}>
+                    Progress:{" "}
+                    {((book.last_read_page / book.nums_page) * 100).toFixed(1)}%
+                  </Typography>
+                  <LinearProgress
+                    variant="determinate"
+                    value={(book.last_read_page / book.nums_page) * 100}
+                    sx={{ height: 12, borderRadius: 10 }}
+                  />
+                </Box>
+              </>
+            )}
           </Box>
         </Box>
 
@@ -139,7 +167,7 @@ const styles = {
     flex: 2,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between", // Đẩy phần mô tả lên và nút xuống
+    justifyContent: "space-between",
     alignItems: "center",
     overflowX: "hidden",
   },
