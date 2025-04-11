@@ -97,6 +97,7 @@ const Login = () => {
               value={password}
               onChange={onPasswordInputChanged}
               error={passwordErr}
+              type="password"
             />
           </div>
           {loading ? (

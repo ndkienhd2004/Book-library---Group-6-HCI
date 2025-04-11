@@ -131,7 +131,8 @@ const BookDetails = ({
               <Page
                 pageNumber={validatedPageNumber}
                 loading={<div>Loading page...</div>}
-                height={window.innerHeight - 300}
+                height={window.innerHeight - 200}
+                width={(window.innerWidth * 1) / 3}
                 renderTextLayer={true}
                 renderAnnotationLayer={true}
               />

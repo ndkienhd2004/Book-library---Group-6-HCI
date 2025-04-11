@@ -26,14 +26,16 @@ const ReadingPage = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "center",
-      alignItems: "stretch",
-      gap: "3rem",
-      padding: "2vh 5vw",
+      alignItems: "center",
+      alignContent: "center",
+      gap: "1rem",
       backgroundColor: darkMode ? "#1a1a1a" : "#f8f8f8",
       color: darkMode ? "#ffffff" : "#000000",
       height: "100vh",
-      overflow: "hidden",
+      width: "100%",
       fontFamily: "Arial, sans-serif",
+      paddingBottom: "2rem",
+      overflow: "hidden",
     },
     sidePanel: {
       flex: "1",
@@ -167,7 +169,7 @@ const ReadingPage = () => {
                 />
               </div>
 
-              <div>
+              <div style={styles.sidePanel}>
                 <SupportReadingTools
                   explainText={explainText}
                   summaryText={summaryText}

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./InputField.css";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 const InputField = ({
   placeholder,
   style,
@@ -8,11 +9,16 @@ const InputField = ({
   onChange,
   error,
   onKeyDown,
+  type,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword && !showPassword ? "password" : "text";
+
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", position: "relative" }}>
       <input
-        type="text"
+        type={inputType}
         autoComplete="off"
         name="text"
         className={`input ${error ? "error" : ""}`}
@@ -26,6 +32,14 @@ const InputField = ({
         onChange={onChange}
         onKeyDown={onKeyDown}
       />
+      {isPassword && (
+        <span
+          onClick={() => setShowPassword((prev) => !prev)}
+          style={styles.eyeIcon}
+        >
+          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+        </span>
+      )}
       {error && <p style={styles.errorText}>{error}</p>}{" "}
     </div>
   );
@@ -54,5 +68,14 @@ const styles = {
     marginTop: "5px",
     fontWeight: "bold",
     textAlign: "left",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: "-10px",
+    top: "64%",
+    transform: "translateY(-50%)",
+    fontSize: "1.2em",
+    cursor: "pointer",
+    color: "#555",
   },
 };

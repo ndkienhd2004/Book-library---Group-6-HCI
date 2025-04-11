@@ -145,6 +145,7 @@ const Register = () => {
               value={password}
               onChange={onPasswordInputChanged}
               error={passwordErr}
+              type="password"
             />
           </div>
           <div style={styles.inputContainer}>
@@ -155,6 +156,7 @@ const Register = () => {
               value={confirmedPassword}
               onChange={onConfirmedPasswordInputChanged}
               error={confirmPasswordErr}
+              type="password"
             />
           </div>
           {loading ? (
