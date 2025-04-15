@@ -6,7 +6,7 @@ import SupportReadingTools from "../../components/SupportReadingTools/SupportRea
 import ReadingTimer from "../../components/ReadingTimer/ReadingTimer";
 import { Alert, Snackbar } from "@mui/material";
 import Loading from "../../components/Loading/Loading";
-
+import relaxImg from "../../assets/images/relaxTime.png";
 const ReadingPage = () => {
   const { bookid } = useParams();
   const [book, setBook] = useState(null);
@@ -19,6 +19,9 @@ const ReadingPage = () => {
   const readingTimeRef = useRef(0);
   const pageNumberRef = useRef(0);
   const [darkMode, setDarkMode] = useState(false);
+  const [firstReadTime, setFirstReadTime] = useState(true);
+  const [isBreak, setIsBreak] = useState(false);
+  const breakTimerRef = useRef(null);
   const _id = useRef("");
 
   const styles = {
@@ -95,6 +98,7 @@ const ReadingPage = () => {
         setBookMetadata(data.metadata);
         setBook(data.fileUrl);
         setReadingTime(Number(data.metadata.time_reading));
+        setFirstReadTime(Number(data.metadata.time_reading));
         setPageNumber(Number(data.metadata.last_read_page));
         _id.current = data.metadata._id;
       } catch (err) {
@@ -130,53 +134,123 @@ const ReadingPage = () => {
     };
   }, [bookid]);
 
+  // break time
+  useEffect(() => {
+    if (
+      !isBreak &&
+      readingTime - firstReadTime > 0 &&
+      (readingTime - firstReadTime) % 9 === 0
+    ) {
+      setIsBreak(true);
+
+      // Đặt timer 60s để quay lại trạng thái đọc
+      breakTimerRef.current = setTimeout(() => {
+        setIsBreak(false);
+      }, 6000); // 1 phút = 60,000 ms
+    }
+
+    return () => {
+      if (breakTimerRef.current) {
+        clearTimeout(breakTimerRef.current);
+      }
+    };
+  }, [readingTime]);
+
   return (
     <>
       <div style={styles.container}>
         <div style={styles.container}>
           {book ? (
-            <>
-              <div style={styles.sidePanel}>
-                <ReadingTimer
-                  setReadingTime={setReadingTime}
-                  readingTime={readingTime}
-                  darkMode={darkMode}
-                />
-                <button
-                  style={styles.toggleButton}
-                  onClick={() => setDarkMode(!darkMode)}
-                >
-                  {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-                </button>
-              </div>
-
+            isBreak ? (
               <div
                 style={{
-                  flex: "3",
                   position: "relative",
-                  alignContent: "center",
-                  justifyContent: "center",
+                  width: "100vw",
+                  height: "100vh",
                 }}
               >
-                <BookDetails
-                  book={book}
-                  setExplainText={setExplainText}
-                  setSummaryText={setSummaryText}
-                  setPageNumber={setPageNumber}
-                  pageNumber={pageNumber}
-                  setLoading={setLoading}
-                  darkMode={darkMode}
+                <img
+                  src={relaxImg}
+                  alt="Relax"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                  }}
                 />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    color: "#fff",
+                    fontSize: "3rem",
+                    fontWeight: "bold",
+                    textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    padding: "2rem",
+                    borderRadius: "1rem",
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "1rem",
+                      color: "white",
+                    }}
+                  >
+                    🧘 Nghỉ ngơi 1 phút nào!
+                  </h2>
+                  <p style={{ fontSize: "1.2rem", color: "white" }}>
+                    Bạn đã đọc 15 phút rồi, hãy thư giãn một chút nhé.
+                  </p>{" "}
+                </div>
               </div>
+            ) : (
+              <>
+                <div style={styles.sidePanel}>
+                  <ReadingTimer
+                    setReadingTime={setReadingTime}
+                    readingTime={readingTime}
+                    darkMode={darkMode}
+                  />
+                  <button
+                    style={styles.toggleButton}
+                    onClick={() => setDarkMode(!darkMode)}
+                  >
+                    {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                  </button>
+                </div>
 
-              <div style={styles.sidePanel}>
-                <SupportReadingTools
-                  explainText={explainText}
-                  summaryText={summaryText}
-                  darkMode={darkMode}
-                />
-              </div>
-            </>
+                <div
+                  style={{
+                    flex: "3",
+                    position: "relative",
+                    alignContent: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <BookDetails
+                    book={book}
+                    setExplainText={setExplainText}
+                    setSummaryText={setSummaryText}
+                    setPageNumber={setPageNumber}
+                    pageNumber={pageNumber}
+                    setLoading={setLoading}
+                    darkMode={darkMode}
+                  />
+                </div>
+
+                <div style={styles.sidePanel}>
+                  <SupportReadingTools
+                    explainText={explainText}
+                    summaryText={summaryText}
+                    darkMode={darkMode}
+                  />
+                </div>
+              </>
+            )
           ) : (
             <p>Loading book details...</p>
           )}
